@@ -1,9 +1,19 @@
+// React
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+// CSS
 import './App.css'
-import LoginPage from './pages/LoginPage'
+// Pages
+import AuthPage from './pages/AuthPage';
+import HomePage from './pages/HomePage';
 
 function App() {
   return (
-    <LoginPage/>
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<AuthPage />}/>
+        <Route path='/home' element={<HomePage />}/>
+      </Routes>
+    </BrowserRouter>
   )
 }
 
