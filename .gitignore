@@ -31,3 +31,5 @@ __pycache__/
 # Env
 frontend/.env
 frontend/.env.local
+
+key/
