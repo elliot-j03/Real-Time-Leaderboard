@@ -2,6 +2,6 @@ from fastapi import FastAPI
 
 app = FastAPI()
 
-@app.get("/")
-def root():
-    return {"message": "Backend is up"}
+@app.get("/items/{item_id}")
+async def root(item_id: str):
+    return {"item_id": item_id}

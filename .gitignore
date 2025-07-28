@@ -26,3 +26,8 @@ dist-ssr
 # Python .venv
 .venv/
 __pycache__/
+*.pyc
+
+# Env
+frontend/.env
+frontend/.env.local

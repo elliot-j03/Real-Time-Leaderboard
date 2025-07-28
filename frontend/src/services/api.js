@@ -1,5 +1,6 @@
 import axios from "axios";
 
+// Backend URL from .env
 const BASE_URL = import.meta.env.VITE_API_URL
 
 export const submitScore = async (score) => {
