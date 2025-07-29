@@ -1,5 +1,5 @@
 // React
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 // Firebase
 import { auth } from "../config/firebase";
@@ -32,7 +32,8 @@ function HomePage() {
         try {
             const scoreAsInt = Number(proposedScore)
             const token = await auth.currentUser.getIdToken();
-            const response = await submitScore(scoreAsInt, token);
+            const uid = auth.currentUser.uid;
+            const response = await submitScore(scoreAsInt, token, uid);
             if (response.status === "success") {
                 setUpdatedScore(response.receivedScore);    
             } else {
@@ -45,7 +46,7 @@ function HomePage() {
 
     const logOut = async () => {
         try {
-            // await signOut(auth);
+            await signOut(auth);
         } catch (err) {
             console.log("[ERROR] logOut: " + err);
         }

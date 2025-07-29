@@ -4,16 +4,21 @@ import { useActionData, useNavigate } from "react-router-dom";
 // Firebase
 import { auth } from "../config/firebase";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+// Functions
+import { addUserName } from "../services/api";
 // Components
 import AuthInputBox from "../components/AuthInputBox";
 
 function AuthPage() {
+    const [userName, setUserName] = useState("");
     const [email, setEmail] = useState("");
     const [passWord, setPassWord] = useState("");
     const [authType, setAuthType] = useState("login");
     const navigate = useNavigate();
 
-
+    function handleUserName(e) {
+        setUserName(e.target.value);
+    }
 
     function handleEmail(e) {
         setEmail(e.target.value);
@@ -25,7 +30,10 @@ function AuthPage() {
 
     const createUser = async () => {
         try {
-            // await createUserWithEmailAndPassword(auth, email, passWord);
+            await createUserWithEmailAndPassword(auth, email, passWord);
+            const uid = auth.currentUser.uid
+            const response = await addUserName(userName, uid);
+            console.log(response);
             navigate('/');
         } catch (err) {
             console.log("[ERROR] createUser: " + err);
@@ -34,7 +42,7 @@ function AuthPage() {
 
     const logIn = async () => {
         try {
-            // await signInWithEmailAndPassword(auth, email, passWord);
+            await signInWithEmailAndPassword(auth, email, passWord);
             navigate('/');
         } catch (err) {
             console.log("[ERROR] logIn: " + err);
@@ -48,9 +56,10 @@ function AuthPage() {
     const loginFull = [logIn, loginInputs, "Login"];
 
     const createUserInputs = [
-        { key: "email", ph: "email", func: handleEmail },
-        { key: "pOne", ph: "password", func: handlePassWord },
-        { key: "pTwo", ph: "confirm password", func: handlePassWord }
+        { ph: "username", func: handleUserName },
+        { ph: "email", func: handleEmail },
+        { ph: "password", func: handlePassWord },
+        { ph: "confirm password", func: handlePassWord }
     ];
     const createUserFull = [createUser, createUserInputs, "Create Account"];
 
