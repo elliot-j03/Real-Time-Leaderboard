@@ -1,9 +1,9 @@
 // React
-import { useState } from "react";
+import { use, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 // Firebase
 import { auth } from "../config/firebase";
-import { signOut } from "firebase/auth";
+import { signOut, onAuthStateChanged } from "firebase/auth";
 // Functions
 import { submitScore } from "../services/api";
 
@@ -11,6 +11,18 @@ function HomePage() {
     const navigate = useNavigate();
     const [proposedScore, setProposedScore] = useState(null);
     const [updatedScore, setUpdatedScore] = useState(null);
+    const [user, setUser] = useState(null);
+
+
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            setUser(user);
+        })
+        return () => unsubscribe();
+    }, []);
+
+    
+
 
     function updateScore(e) {
         setProposedScore(e.target.value);
@@ -33,24 +45,40 @@ function HomePage() {
 
     const logOut = async () => {
         try {
-            await signOut(auth);
-            navigate("/");
+            // await signOut(auth);
         } catch (err) {
             console.log("[ERROR] logOut: " + err);
         }
     };
 
+    function navLogIn() {
+        navigate("login");
+    }
+    function navLeaderboard() {
+        navigate("leaderboard");
+    }
+
+    const logInState = (auth.currentUser == null ? navLogIn : logOut);
+    const logInStateText = (auth.currentUser == null ? "Log In" : "Log Out");
+
     return (
-        <div style={{ display: "flex", flexDirection: "column"}}>
-            <h1>Home Page</h1>
-            <p>SCORE</p>
-            <p>{"Proposed: "+proposedScore}</p>
-            <p>{"Updated: "+updatedScore}</p>
-            <input onChange={updateScore} placeholder="score"/>
-            <p>{"Logged in as: " + auth?.currentUser?.email}</p>
-            <button onClick={handleSubmit}>Submit Score</button>
-            <button onClick={logOut}>Log Out</button>
-        </div>
+        <>
+            <div style={{ backgroundColor: "#1e1e1e", display: "flex", 
+                flexDirection: "row", justifyContent: "end", padding: "1rem"}}>
+                    <button onClick={navLeaderboard} >View Leaderboard</button>
+                    <p>{"Online : " + user}</p>
+                    <button onClick={logInState} style={{ flex: "0.2"}}>{logInStateText}</button>
+            </div>
+            <div className="home-page">
+                <h1>Home Page</h1>
+                <p>SCORE</p>
+                <p>{"Proposed: "+proposedScore}</p>
+                <p>{"Updated: "+updatedScore}</p>
+                <input onChange={updateScore} placeholder="score"/>
+                <p>{"Logged in as: " + auth?.currentUser?.email}</p>
+                <button onClick={handleSubmit}>Submit Score</button>
+            </div>
+        </>
     )
 }
 

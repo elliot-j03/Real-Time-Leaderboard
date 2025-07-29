@@ -5,13 +5,15 @@ import './App.css'
 // Pages
 import AuthPage from './pages/AuthPage';
 import HomePage from './pages/HomePage';
+import LBPage from './pages/LeaderboardPage';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={<AuthPage />}/>
-        <Route path='/home' element={<HomePage />}/>
+        <Route path='/' element={<HomePage />}/>
+        <Route path='/login' element={<AuthPage />}/>
+        <Route path='/leaderboard' element={<LBPage />}/>
       </Routes>
     </BrowserRouter>
   )

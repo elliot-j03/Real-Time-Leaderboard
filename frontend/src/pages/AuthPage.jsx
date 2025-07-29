@@ -25,8 +25,8 @@ function AuthPage() {
 
     const createUser = async () => {
         try {
-            await createUserWithEmailAndPassword(auth, email, passWord);
-            navigate('/home');
+            // await createUserWithEmailAndPassword(auth, email, passWord);
+            navigate('/');
         } catch (err) {
             console.log("[ERROR] createUser: " + err);
         }
@@ -34,8 +34,8 @@ function AuthPage() {
 
     const logIn = async () => {
         try {
-            await signInWithEmailAndPassword(auth, email, passWord);
-            navigate('/home');
+            // await signInWithEmailAndPassword(auth, email, passWord);
+            navigate('/');
         } catch (err) {
             console.log("[ERROR] logIn: " + err);
         }
@@ -60,21 +60,31 @@ function AuthPage() {
     const authInput = (authType == "login" ? loginFull : createUserFull);
     const [buttonFunction, cardType, buttonText] = authInput;
 
+    function returnToHome() {
+        navigate("/")
+    }
+
     return (
         <>
-        <h1>Login Page</h1>
-        <div style={{ display: "flex", flexDirection: "column"}}>
-            <p>{"Email: " + email}</p>
-            <p>{"Password: " + passWord}</p>
-            <div>
-                <AuthInputBox
-                buttonFunction={buttonFunction} 
-                buttonText={buttonText}
-                cardType={cardType}/>
+            <div style={{ backgroundColor: "#1e1e1e", display: "flex", 
+                flexDirection: "row", justifyContent: "left", padding: "1rem"}}>
+                    <button onClick={returnToHome} style={{ flex: "0.2"}}>Home</button>
             </div>
-            <p>No account?</p>
-            <button onClick={swapAuthType}>Swap</button>
-        </div>
+            <div className="home-page">
+                <h1>Login Page</h1>
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center"}}>
+                    {/* <p>{"Email: " + email}</p>
+                    <p>{"Password: " + passWord}</p> */}
+                    <div>
+                        <AuthInputBox
+                        buttonFunction={buttonFunction} 
+                        buttonText={buttonText}
+                        cardType={cardType}/>
+                    </div>
+                    <p>No account?</p>
+                    <button onClick={swapAuthType}>Swap</button>
+                </div>
+            </div>
         </>
     )
 }
