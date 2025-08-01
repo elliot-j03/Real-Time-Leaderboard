@@ -1,8 +1,28 @@
 // Axios
 import axios from "axios";
+// Firebase
+import { auth } from "../config/firebase";
 
 // Backend URL from .env
 const BASE_URL = import.meta.env.VITE_API_URL
+
+export const initUserInDB = async (user, email, uid) => {
+    const data = {
+        user_name: user,
+        email: email,
+        user_uid: uid
+    };
+    const response = await axios.post(`${BASE_URL}/username/add`, data);
+    return response.data;
+};
+
+export const getUserName = async (token) => {
+    const data = {
+        auth_token: token
+    }
+    const response = await axios.post(`${BASE_URL}/username/get/${auth?.currentUser?.uid}`, data);
+    console.log(response.data);
+};
 
 export const submitScore = async (score, token, uid) => {
     const data = {
@@ -13,12 +33,3 @@ export const submitScore = async (score, token, uid) => {
     const response = await axios.post(`${BASE_URL}/score`, data);
     return response.data;
 };
-
-export const addUserName = async (user, uid) => {
-    const data = {
-        user_name: user,
-        user_uid: uid
-    };
-    const response = await axios.post(`${BASE_URL}/add-username`, data);
-    return response.data;
-}
