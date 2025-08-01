@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { auth } from "../config/firebase";
 // Components
 import LBBox from "../components/LeaderboardBox";
+import SubmitBox from "../components/SubmitBox";
 
 function LBPage({ userData }) {
     const [userList, setUserList] = useState([]);
@@ -77,22 +78,25 @@ function LBPage({ userData }) {
         setUserList(udArr);
     }, [userData]);
 
-    useEffect(() => {
-        console.log(userList);
-    }, [userList]);
-
 
     return (
         <div className="home-page">
             <button onClick={navHome}>Home</button>
             <h1>Leaderboard</h1>
-            {userList.map(([uName, uScore, i]) => {
-                return (
-                    <LBBox index={i}
-                    userName={uName}
-                    userScore={uScore} />
-                )
-            })}
+            <div style={{ display: "flex", flexDirection: "row" }}>
+                <div style={{ backgroundColor: "#1e1e1e", padding: "1rem"}}>
+                    {userList.map(([uName, uScore, i]) => {
+                        return (
+                            <LBBox index={i}
+                            userName={uName}
+                            userScore={uScore} />
+                        )
+                    })}
+                </div>
+                <div>
+                    <SubmitBox />
+                </div>
+            </div>
         </div>
     )
 }

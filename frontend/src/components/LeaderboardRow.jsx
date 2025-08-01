@@ -1,9 +1,13 @@
 function LBRow({ pos, user, score }) {
     return (
-        <div style={{ backgroundColor: "#1e1e1e", display: "flex", flexDirection: "row" }}>
-            <p style={{ color: "red", paddingRight: "1rem" , paddingLeft: "1rem" }}>{"Position: " + pos}</p>
-            <p style={{ color: "pink", paddingRight: "1rem" , paddingLeft: "1rem"  }}>{"User: " + user}</p>
-            <p style={{ color: "green", paddingRight: "1rem" , paddingLeft: "1rem"  }}>{"Score: " + score}</p>
+        <div style={{ backgroundColor: pos === 1 ? "#ffd05aff" :
+            pos === 2 ? "#bbbbbbff" : 
+            pos === 3 ? "#915827ff" : 
+            "#1e1e1e",
+         display: "flex", flexDirection: "row" }}>
+            <p style={{ color: "white", paddingRight: "1rem" , paddingLeft: "1rem" }}>{pos}</p>
+            <p style={{ color: "white", paddingRight: "1rem" , paddingLeft: "1rem"  }}>{user}</p>
+            <p style={{ color: "white", paddingRight: "1rem" , paddingLeft: "1rem"  }}>{score}</p>
         </div>
     )
 }

@@ -5,12 +5,10 @@ import { useNavigate } from "react-router-dom";
 import { auth } from "../config/firebase";
 import { signOut, onAuthStateChanged } from "firebase/auth";
 // Functions
-import { submitScore } from "../services/api";
+
 
 function HomePage() {
     const navigate = useNavigate();
-    const [proposedScore, setProposedScore] = useState(null);
-    const [updatedScore, setUpdatedScore] = useState(null);
     const [user, setUser] = useState(null);
 
 
@@ -20,30 +18,6 @@ function HomePage() {
         });
         return () => unsubscribe();
     }, []);
-
-    
-
-
-    function updateScore(e) {
-        setProposedScore(e.target.value);
-    }
-
-    async function handleSubmit() {
-        try {
-            const scoreAsInt = Number(proposedScore)
-            const token = await auth.currentUser.getIdToken();
-            const uid = auth.currentUser.uid;
-            const response = await submitScore(scoreAsInt, token, uid);
-            if (response.status === "success") {
-                setUpdatedScore(response.receivedScore);
-                console.log("[RESPONSE] HomePage.jsx/handleSubmit: "+response);
-            } else {
-                setUpdatedScore("You dont have permission to do that"); 
-            }
-        } catch (err) {
-            console.log("[ERROR] HomePage.jsx/handleSubmit: " + err);
-        }
-    }
 
     const logOut = async () => {
         try {
@@ -74,15 +48,11 @@ function HomePage() {
             </div>
             <div className="home-page">
                 <h1>Home Page</h1>
-                <p>SCORE</p>
-                <p>{"Proposed: "+proposedScore}</p>
-                <p>{"Updated: "+updatedScore}</p>
-                <input onChange={updateScore} placeholder="score"/>
-                <p>{"Logged in as: " + auth?.currentUser?.email}</p>
-                <button onClick={handleSubmit}>Submit Score</button>
+                <h2>{"Welcome " + auth?.currentUser?.email}</h2>
+                <h3>View the leaderboard to see the current highest ranking players...</h3>
             </div>
         </>
     )
 }
 
-export default HomePage
+export default HomePage;
