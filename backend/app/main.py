@@ -47,7 +47,7 @@ async def get_user_name(user_uid: str, data: Token):
     if auth:
         try:
             user = await firebase_funcs.get_user_name_db(uid)
-            return user
+            return {"username": user}
         except Exception as e:
             print(f"[ERROR] main.py/get_user_name: {e}")
     else:

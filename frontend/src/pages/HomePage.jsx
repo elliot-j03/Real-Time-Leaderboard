@@ -1,23 +1,16 @@
 // React
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
 // Firebase
 import { auth } from "../config/firebase";
-import { signOut, onAuthStateChanged } from "firebase/auth";
-// Functions
+import { signOut } from "firebase/auth";
+// Components
+import { UserContext } from "../components/UserProvider";
 
 
 function HomePage() {
     const navigate = useNavigate();
-    const [user, setUser] = useState(null);
-
-
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-            setUser(user);
-        });
-        return () => unsubscribe();
-    }, []);
+    const { userName } = useContext(UserContext);
 
     const logOut = async () => {
         try {
@@ -32,7 +25,8 @@ function HomePage() {
         navigate("login");
     }
     function navLeaderboard() {
-        navigate(`/leaderboard/${auth?.currentUser?.uid}`);
+        const path = auth?.currentUser?.uid !== undefined ? `/leaderboard/${auth?.currentUser?.uid}` : "/leaderboard";
+        navigate(path);
     }
 
     const logInState = (auth.currentUser == null ? navLogIn : logOut);
@@ -42,13 +36,17 @@ function HomePage() {
         <>
             <div style={{ backgroundColor: "#1e1e1e", display: "flex", 
                 flexDirection: "row", justifyContent: "end", padding: "1rem"}}>
-                    <button onClick={navLeaderboard} >View Leaderboard</button>
-                    <p>{"Online : " + user}</p>
-                    <button onClick={logInState} style={{ flex: "0.2"}}>{logInStateText}</button>
+                    <div style={{ paddingRight: "1rem" }}>
+                        <button onClick={navLeaderboard} >View Leaderboard</button>
+                    </div>
+                    <div style={{ paddingLeft: "1rem" }}>
+                        <button onClick={logInState} style={{ flex: "0.2"}}>{logInStateText}</button>
+                    </div>
             </div>
             <div className="home-page">
                 <h1>Home Page</h1>
-                <h2>{"Welcome " + auth?.currentUser?.email}</h2>
+                <h2>{userName === "{undefined user}" ? 
+                "Log in to add your score!" : "Welcome " + userName}</h2>
                 <h3>View the leaderboard to see the current highest ranking players...</h3>
             </div>
         </>

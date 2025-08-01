@@ -37,10 +37,9 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={<HomePage />}/>
-        <Route path={`/${userUID}`} element={<HomePage />}/>
+        <Route path={userUID ? `/${userUID}` : "/"} element={<HomePage />}/>
         <Route path='/login' element={<AuthPage />}/>
-        <Route path={`/leaderboard/${userUID}`} element={<LBPage userData={userData}/>}/>
+        <Route path={userUID ? `/leaderboard/${userUID}` : "/leaderboard"} element={<LBPage userData={userData}/>}/>
       </Routes>
     </BrowserRouter>
   )

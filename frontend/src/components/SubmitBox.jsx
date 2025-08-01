@@ -34,8 +34,9 @@ function SubmitBox() {
         <div style={{ display: "flex", flexDirection: "column",
         justifyContent: "center", alignItems: "center",
         padding: "1rem", paddingTop: "7rem"}}>
-            <p>{"Proposed: "+proposedScore}</p>
-            <input onChange={updateScore} placeholder="score"/>
+            <div style={{ padding: "1rem" }}>
+                <input onChange={updateScore} placeholder="score"/>
+            </div>
             <button onClick={handleSubmit}>Submit Score</button>
         </div>
     )
