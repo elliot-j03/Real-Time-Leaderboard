@@ -39,16 +39,30 @@ async def update_score_db(uid, score):
 
 # Sets the username of the corresponding user uid upon account creation
 async def init_user_db(uid, email, user):
-    data = {
+    data_users = {
         "username": user,
         "email": email,
         "score": 0
     }
-    ref = db.reference(f"/users/{uid}")
+    ref_users = db.reference(f"/users/{uid}")
     try:
-        ref.set(data)
+        ref_users.set(data_users)
     except Exception as e:
-        print(f"[ERROR] firebase_funcs.py/init_user_db: {e}")
+        print(f"[ERROR] firebase_funcs.py/init_user_db -> data_users: {e}")
+    
+    ref_names = db.reference(f"/names/{user}")
+    try:
+        ref_names.set(True)
+    except Exception as e:
+        print(f"[ERROR] firebase_funcs.py/init_user_db -> data_name: {e}")
+
+
+# Checks if a username is taken
+async def check_user_name_db(user_name):
+    ref = db.reference(f"/names/{user_name}")
+    if ref.get() is True:
+        return True
+    return False
 
 
 # Gets the username of the corresponding user uid

@@ -19,10 +19,18 @@ export const initUserInDB = async (user, email, uid) => {
 export const getUserName = async (token) => {
     const data = {
         auth_token: token
-    }
+    };
     const response = await axios.post(`${BASE_URL}/username/get/${auth?.currentUser?.uid}`, data);
-    console.log(response.data);
+    return response.data;
 };
+
+export const checkUserName = async (user) => {
+    const data = {
+        user_name: user
+    };
+    const response = await axios.post(`${BASE_URL}/username/check`, data);
+    return response.data;
+}
 
 export const submitScore = async (score, token, uid) => {
     const data = {

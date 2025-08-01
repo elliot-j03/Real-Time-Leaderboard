@@ -54,6 +54,17 @@ async def get_user_name(user_uid: str, data: Token):
         return "failure to verify token"
 
 
+class CheckUser(BaseModel):
+    user_name: str
+
+
+@app.post("/username/check")
+async def check_user_name(data: CheckUser):
+    user = data.user_name
+    exists = await firebase_funcs.check_user_name_db(user)
+    return {"success": exists}
+
+
 class ScoreSubmission(BaseModel):
     score_submitted: int
     auth_token: str

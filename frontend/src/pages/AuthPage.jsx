@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { auth } from "../config/firebase";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 // Functions
-import { initUserInDB } from "../services/api";
+import { initUserInDB, checkUserName } from "../services/api";
 // Components
 import AuthInputBox from "../components/AuthInputBox";
 
@@ -38,37 +38,50 @@ function AuthPage() {
 
     function passWordCheck(pFirst, pSecond) {
         if (pFirst == pSecond) {
-            return (true);
+            return true;
         }
-        return (false);
+        return false;
     }
 
+
+    const userNameCheck = async (uName) => {
+        const exists = await checkUserName(uName);
+        return exists.success;
+    }
+
+
     const createUser = async () => {
-        if (passWordCheck(passWordFirst, passWordSecond)) {
-            setCredentialWarning("");
-            try {
-                await createUserWithEmailAndPassword(auth, email, passWordFirst);
-                const uid = auth.currentUser.uid
-                const response = await initUserInDB(userName, email, uid);
-                console.log("[RESPONSE] AuthPage.jsx/createUser: "+response);
-                navigate(`/${auth?.currentUser?.uid}`);
-            } catch (err) {
-                const code = err.code;
-                switch (code) {
-                    case "auth/email-already-exists":
-                        setCredentialWarning("This email is already in use...");
-                        break;
-                    case "auth/invalid-email":
-                        setCredentialWarning("Please enter a valid email...");
-                        break;
-                    case "auth/weak-password":
-                        setCredentialWarning("Your password must be atleast 6 characters...");
-                        break;
+        if (await userNameCheck(userName) !== true) {
+            if (passWordCheck(passWordFirst, passWordSecond)) {
+                setCredentialWarning("");
+                try {
+                    await createUserWithEmailAndPassword(auth, email, passWordFirst);
+                    const uid = auth.currentUser.uid
+                    const response = await initUserInDB(userName, email, uid);
+                    console.log("[RESPONSE] AuthPage.jsx/createUser: "+response);
+                    navigate(`/${auth?.currentUser?.uid}`);
+                } catch (err) {
+                    const code = err.code;
+                    switch (code) {
+                        case "auth/email-already-exists":
+                            setCredentialWarning("This email is already in use...");
+                            break;
+                        case "auth/invalid-email":
+                            setCredentialWarning("Please enter a valid email...");
+                            break;
+                        case "auth/weak-password":
+                            setCredentialWarning("Your password must be atleast 6 characters...");
+                            break;
+                        case "auth/missing-password":
+                            setCredentialWarning("Please enter a password...");
+                    }
+                    console.log("[ERROR] AuthPage.jsx/createUser: " + err);
                 }
-                console.log("[ERROR] AuthPage.jsx/createUser: " + err);
+            } else {
+                setCredentialWarning("Please ensure your passwords match...");
             }
         } else {
-            setCredentialWarning("Please ensure your passwords match...");
+            setCredentialWarning("That username is already taken...");
         }
     };
 

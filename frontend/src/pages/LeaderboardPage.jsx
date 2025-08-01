@@ -16,66 +16,68 @@ function LBPage({ userData }) {
         navigate(`/${auth?.currentUser?.uid}`);
     }
 
-
+    // Make blank leaderboard look better
     useEffect(() => {
-        const semidUD = Object.entries(userData).map(([ uid, details ]) => {
-            return details;
-        })
-        const finalUD = semidUD.map(({ email, score, username }) => {
-            return [username, score];
-        })
-        const udArr = finalUD.sort((a , b) => b[1] - a[1]);
+        if (userData) {
+            const semidUD = Object.entries(userData).map(([ uid, details ]) => {
+                return details;
+            })
+            const finalUD = semidUD.map(({ email, score, username }) => {
+                return [username, score];
+            })
+            const udArr = finalUD.sort((a , b) => b[1] - a[1]);
 
-        let littleArr = [];
-        let bigArr = [];
-        for (let i = 0; i < udArr.length; i++) {
-            if (i === 0) {
-                littleArr.push(udArr[i][1]);
+            let littleArr = [];
+            let bigArr = [];
+            for (let i = 0; i < udArr.length; i++) {
+                if (i === 0) {
+                    littleArr.push(udArr[i][1]);
+                }
+                else if (udArr[i][1] !== udArr[i-1][1] && i !== udArr.length - 1) {
+                    bigArr.push(littleArr);
+                    littleArr = [udArr[i][1]];
+                } else if (udArr[i][1] !== udArr[i-1][1] && i === udArr.length - 1) {
+                    bigArr.push(littleArr);
+                    littleArr = [udArr[i][1]];
+                    bigArr.push(littleArr);
+                } else if (udArr[i][1] === udArr[i-1][1]) {
+                    littleArr.push(udArr[i][1]);
+                }
             }
-             else if (udArr[i][1] !== udArr[i-1][1] && i !== udArr.length - 1) {
-                bigArr.push(littleArr);
-                littleArr = [udArr[i][1]];
-            } else if (udArr[i][1] !== udArr[i-1][1] && i === udArr.length - 1) {
-                bigArr.push(littleArr);
-                littleArr = [udArr[i][1]];
-                bigArr.push(littleArr);
-            } else if (udArr[i][1] === udArr[i-1][1]) {
-                littleArr.push(udArr[i][1]);
+            
+            let pos = 1;
+            let posArr = [];
+            let miniArr = [];
+            for (let i = 0; i < bigArr.length; i++) {
+                if (i === 0) {
+                    miniArr.push([pos, bigArr[i].length]);
+                    posArr.push(miniArr);
+                    miniArr = [];
+                } else {
+                    pos = bigArr[i-1].length + pos;
+                    miniArr.push([pos, bigArr[i].length]);
+                    posArr.push(miniArr);
+                    miniArr = [];
+                }
             }
-        }
-        
-        let pos = 1;
-        let posArr = [];
-        let miniArr = [];
-        for (let i = 0; i < bigArr.length; i++) {
-            if (i === 0) {
-                miniArr.push([pos, bigArr[i].length]);
-                posArr.push(miniArr);
-                miniArr = [];
-            } else {
-                pos = bigArr[i-1].length + pos;
-                miniArr.push([pos, bigArr[i].length]);
-                posArr.push(miniArr);
-                miniArr = [];
-            }
-        }
 
-        let ranksArr = [];
-        for (let i = 0; i < posArr.length; i++) {
-            let currentItem = posArr[i];
-            let rank = currentItem[0][0];
-            let count = currentItem[0][1];
-        
-            for (let j = 0; j < count; j++) {
-                ranksArr.push(rank);
+            let ranksArr = [];
+            for (let i = 0; i < posArr.length; i++) {
+                let currentItem = posArr[i];
+                let rank = currentItem[0][0];
+                let count = currentItem[0][1];
+            
+                for (let j = 0; j < count; j++) {
+                    ranksArr.push(rank);
+                }
             }
+            
+            for (let i = 0; i < udArr.length; i++) {
+                udArr[i].push(ranksArr[i]);
+            }
+            
+            setUserList(udArr);
         }
-        
-        for (let i = 0; i < udArr.length; i++) {
-            udArr[i].push(ranksArr[i]);
-        }
-        
-        setUserList(udArr);
     }, [userData]);
 
 
