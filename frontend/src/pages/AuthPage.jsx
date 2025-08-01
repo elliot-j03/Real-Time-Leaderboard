@@ -1,18 +1,22 @@
 // React
 import { useState } from "react";
-import { useActionData, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 // Firebase
 import { auth } from "../config/firebase";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 // Functions
-import { addUserName } from "../services/api";
+import { initUserInDB } from "../services/api";
 // Components
 import AuthInputBox from "../components/AuthInputBox";
 
+
+// TODO: Make sure it somehow checks the database to see if the username is taken
 function AuthPage() {
     const [userName, setUserName] = useState("");
     const [email, setEmail] = useState("");
-    const [passWord, setPassWord] = useState("");
+    const [passWordFirst, setPassWordFirst] = useState("");
+    const [passWordSecond, setPassWordSecond] = useState("");
+    const [credentialWarning, setCredentialWarning] = useState("");
     const [authType, setAuthType] = useState("login");
     const navigate = useNavigate();
 
@@ -24,42 +28,77 @@ function AuthPage() {
         setEmail(e.target.value);
     }
 
-    function handlePassWord(e) {
-        setPassWord(e.target.value);
+    function handlePassWordFirst(e) {
+        setPassWordFirst(e.target.value);
+    }
+
+    function handlePassWordSecond(e) {
+        setPassWordSecond(e.target.value);
+    }
+
+    function passWordCheck(pFirst, pSecond) {
+        if (pFirst == pSecond) {
+            return (true);
+        }
+        return (false);
     }
 
     const createUser = async () => {
-        try {
-            await createUserWithEmailAndPassword(auth, email, passWord);
-            const uid = auth.currentUser.uid
-            const response = await addUserName(userName, uid);
-            console.log(response);
-            navigate('/');
-        } catch (err) {
-            console.log("[ERROR] createUser: " + err);
+        if (passWordCheck(passWordFirst, passWordSecond)) {
+            setCredentialWarning("");
+            try {
+                await createUserWithEmailAndPassword(auth, email, passWordFirst);
+                const uid = auth.currentUser.uid
+                const response = await initUserInDB(userName, email, uid);
+                console.log("[RESPONSE] AuthPage.jsx/createUser: "+response);
+                navigate(`/${auth?.currentUser?.uid}`);
+            } catch (err) {
+                const code = err.code;
+                switch (code) {
+                    case "auth/email-already-exists":
+                        setCredentialWarning("This email is already in use...");
+                        break;
+                    case "auth/invalid-email":
+                        setCredentialWarning("Please enter a valid email...");
+                        break;
+                    case "auth/weak-password":
+                        setCredentialWarning("Your password must be atleast 6 characters...");
+                        break;
+                }
+                console.log("[ERROR] AuthPage.jsx/createUser: " + err);
+            }
+        } else {
+            setCredentialWarning("Please ensure your passwords match...");
         }
     };
 
     const logIn = async () => {
         try {
-            await signInWithEmailAndPassword(auth, email, passWord);
-            navigate('/');
+            await signInWithEmailAndPassword(auth, email, passWordFirst);
+            navigate(`/${auth?.currentUser?.uid}`);
         } catch (err) {
-            console.log("[ERROR] logIn: " + err);
+            const code = err.code
+            switch (code) {
+                case "auth/invalid-credential":
+                    setCredentialWarning("The email or password is incorrect...");
+                    break;
+            }
+            console.log("[ERROR] AuthPage.jsx/logIn: " + err);
         }
     };
 
+    // Lists to be mapped to auth card
     const loginInputs = [
         { key: "email", ph: "email", func: handleEmail },
-        { key: "pOne", ph: "password", func: handlePassWord }
+        { key: "pOne", ph: "password", func: handlePassWordFirst }
     ];
     const loginFull = [logIn, loginInputs, "Login"];
 
     const createUserInputs = [
         { ph: "username", func: handleUserName },
         { ph: "email", func: handleEmail },
-        { ph: "password", func: handlePassWord },
-        { ph: "confirm password", func: handlePassWord }
+        { ph: "password", func: handlePassWordFirst },
+        { ph: "confirm password", func: handlePassWordSecond }
     ];
     const createUserFull = [createUser, createUserInputs, "Create Account"];
 
@@ -84,6 +123,7 @@ function AuthPage() {
                 <div style={{ display: "flex", flexDirection: "column", alignItems: "center"}}>
                     {/* <p>{"Email: " + email}</p>
                     <p>{"Password: " + passWord}</p> */}
+                    <p>{credentialWarning}</p>
                     <div>
                         <AuthInputBox
                         buttonFunction={buttonFunction} 

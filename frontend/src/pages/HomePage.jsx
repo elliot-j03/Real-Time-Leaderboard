@@ -17,7 +17,7 @@ function HomePage() {
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             setUser(user);
-        })
+        });
         return () => unsubscribe();
     }, []);
 
@@ -35,20 +35,22 @@ function HomePage() {
             const uid = auth.currentUser.uid;
             const response = await submitScore(scoreAsInt, token, uid);
             if (response.status === "success") {
-                setUpdatedScore(response.receivedScore);    
+                setUpdatedScore(response.receivedScore);
+                console.log("[RESPONSE] HomePage.jsx/handleSubmit: "+response);
             } else {
                 setUpdatedScore("You dont have permission to do that"); 
             }
         } catch (err) {
-            console.log("[ERROR] handleSubmit: " + err)
+            console.log("[ERROR] HomePage.jsx/handleSubmit: " + err);
         }
     }
 
     const logOut = async () => {
         try {
             await signOut(auth);
+            navigate("/");
         } catch (err) {
-            console.log("[ERROR] logOut: " + err);
+            console.log("[ERROR] HomePage.jsx/logOut: " + err);
         }
     };
 
@@ -56,7 +58,7 @@ function HomePage() {
         navigate("login");
     }
     function navLeaderboard() {
-        navigate("leaderboard");
+        navigate(`/leaderboard/${auth?.currentUser?.uid}`);
     }
 
     const logInState = (auth.currentUser == null ? navLogIn : logOut);
