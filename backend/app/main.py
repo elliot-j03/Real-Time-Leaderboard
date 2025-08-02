@@ -19,6 +19,11 @@ app.add_middleware(
 )
 
 
+@app.get("/ping")
+async def backend_check():
+    return True
+
+
 class UserNameSubmission(BaseModel):
     user_name: str
     email: str

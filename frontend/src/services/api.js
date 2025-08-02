@@ -6,6 +6,13 @@ import { auth } from "../config/firebase";
 // Backend URL from .env
 const BASE_URL = import.meta.env.VITE_API_URL
 
+// Check if backend is runnig
+export const backendPing = async () => {
+    const response = await axios.get(`${BASE_URL}/ping`);
+    return response.data;
+}
+
+// Initialise a new user node
 export const initUserInDB = async (user, email, uid) => {
     const data = {
         user_name: user,
@@ -16,6 +23,7 @@ export const initUserInDB = async (user, email, uid) => {
     return response.data;
 };
 
+// Get a username for a uid
 export const getUserName = async (token) => {
     const data = {
         auth_token: token
@@ -24,6 +32,7 @@ export const getUserName = async (token) => {
     return response.data;
 };
 
+// Check if a username is already taken
 export const checkUserName = async (user) => {
     const data = {
         user_name: user
@@ -32,6 +41,7 @@ export const checkUserName = async (user) => {
     return response.data;
 }
 
+// Submit a score
 export const submitScore = async (score, token, uid) => {
     const data = {
         score_submitted: score,

@@ -4,10 +4,11 @@ import { useNavigate } from "react-router-dom";
 // Firebase
 import { auth } from "../config/firebase";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
-// Functions
-import { initUserInDB, checkUserName } from "../services/api";
+// API
+import { initUserInDB, checkUserName, backendPing } from "../services/api";
 // Components
 import AuthInputBox from "../components/AuthInputBox";
+import ErrorBox from "../components/ErrorBox";
 
 
 // TODO: Make sure it somehow checks the database to see if the username is taken
@@ -16,7 +17,7 @@ function AuthPage() {
     const [email, setEmail] = useState("");
     const [passWordFirst, setPassWordFirst] = useState("");
     const [passWordSecond, setPassWordSecond] = useState("");
-    const [credentialWarning, setCredentialWarning] = useState("");
+    const [warning, setWarning] = useState("");
     const [authType, setAuthType] = useState("login");
     const navigate = useNavigate();
 
@@ -50,53 +51,79 @@ function AuthPage() {
     }
 
 
+    const backendCheck = async () => {
+        try {
+            return await backendPing();
+        }
+        catch {
+            return false;
+        }
+    }
+
+
     const createUser = async () => {
-        if (await userNameCheck(userName) !== true) {
-            if (passWordCheck(passWordFirst, passWordSecond)) {
-                setCredentialWarning("");
-                try {
-                    await createUserWithEmailAndPassword(auth, email, passWordFirst);
-                    const uid = auth.currentUser.uid
-                    const response = await initUserInDB(userName, email, uid);
-                    console.log("[RESPONSE] AuthPage.jsx/createUser: "+response);
-                    navigate(`/${auth?.currentUser?.uid}`);
-                } catch (err) {
-                    const code = err.code;
-                    switch (code) {
-                        case "auth/email-already-exists":
-                            setCredentialWarning("This email is already in use...");
-                            break;
-                        case "auth/invalid-email":
-                            setCredentialWarning("Please enter a valid email...");
-                            break;
-                        case "auth/weak-password":
-                            setCredentialWarning("Your password must be atleast 6 characters...");
-                            break;
-                        case "auth/missing-password":
-                            setCredentialWarning("Please enter a password...");
+        setWarning("");
+        if (await backendCheck()) {
+            if (await userNameCheck(userName) !== true) {
+                if (passWordCheck(passWordFirst, passWordSecond)) {
+                    try {
+                        await createUserWithEmailAndPassword(auth, email, passWordFirst);
+                        const uid = auth.currentUser.uid
+                        const response = await initUserInDB(userName, email, uid);
+                        console.log("[RESPONSE] AuthPage.jsx/createUser: "+response);
+                        navigate(`/${auth?.currentUser?.uid}`);
+                    } catch (err) {
+                        const code = err.code;
+                        switch (code) {
+                            case "auth/email-already-exists":
+                                setWarning("This email is already in use...");
+                                break;
+                            case "auth/invalid-email":
+                                setWarning("Please enter a valid email...");
+                                break;
+                            case "auth/weak-password":
+                                setWarning("Your password must be atleast 6 characters...");
+                                break;
+                            case "auth/missing-password":
+                                setWarning("Please enter a password...");
+                                break;
+                        }
+                        console.log("[ERROR] AuthPage.jsx/createUser: " + err);
                     }
-                    console.log("[ERROR] AuthPage.jsx/createUser: " + err);
+                } else {
+                    setWarning("Please ensure your passwords match...");
                 }
             } else {
-                setCredentialWarning("Please ensure your passwords match...");
+                setWarning("That username is already taken...");
             }
         } else {
-            setCredentialWarning("That username is already taken...");
+            setWarning("Cannot create a new account at this time...");
         }
     };
 
     const logIn = async () => {
-        try {
-            await signInWithEmailAndPassword(auth, email, passWordFirst);
-            navigate(`/${auth?.currentUser?.uid}`);
-        } catch (err) {
-            const code = err.code
-            switch (code) {
-                case "auth/invalid-credential":
-                    setCredentialWarning("The email or password is incorrect...");
-                    break;
+        setWarning("");
+        if (await backendCheck()) {
+            try {
+                await signInWithEmailAndPassword(auth, email, passWordFirst);
+                navigate(`/${auth?.currentUser?.uid}`);
+            } catch (err) {
+                const code = err.code
+                switch (code) {
+                    case "auth/invalid-credential":
+                        setWarning("The email or password is incorrect...");
+                        break;
+                    case "auth/invalid-email":
+                        setWarning("Please enter a valid email...");
+                        break;
+                    case "auth/missing-password":
+                        setWarning("Please enter a password...");
+                        break;
+                }
+                console.log("[ERROR] AuthPage.jsx/logIn: " + err);
             }
-            console.log("[ERROR] AuthPage.jsx/logIn: " + err);
+        } else {
+            setWarning("Cannot log in at this time...");
         }
     };
 
@@ -117,6 +144,7 @@ function AuthPage() {
 
     const swapAuthType = () => {
         setAuthType(authType == "login" ? "create" : "login");
+        setWarning("");
     }
     const authInput = (authType == "login" ? loginFull : createUserFull);
     const [buttonFunction, cardType, buttonText] = authInput;
@@ -134,16 +162,20 @@ function AuthPage() {
             <div className="home-page">
                 <h1>Login Page</h1>
                 <div style={{ display: "flex", flexDirection: "column", alignItems: "center"}}>
-                    {/* <p>{"Email: " + email}</p>
-                    <p>{"Password: " + passWord}</p> */}
-                    <p>{credentialWarning}</p>
-                    <div>
+                    <div style={{ height: "5rem" }}>
+                        {warning === "" ? null : <ErrorBox errMessage={warning}/>}
+                    </div>
+                    <div style={{ height: "13rem", padding: "0.5rem",
+                        backgroundColor: "#1e1e1e", borderRadius: "15px",
+                        display: "flex", flexDirection: "column",
+                        justifyContent: "center"
+                    }}>
                         <AuthInputBox
                         buttonFunction={buttonFunction} 
                         buttonText={buttonText}
                         cardType={cardType}/>
                     </div>
-                    <p>No account?</p>
+                    <p>{authInput === loginFull ? "No account?" : "Back to login"}</p>
                     <button onClick={swapAuthType}>Swap</button>
                 </div>
             </div>
