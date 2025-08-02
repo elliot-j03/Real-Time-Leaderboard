@@ -1,13 +1,15 @@
 function AuthInputBox({ buttonFunction, buttonText, cardType }) {
     return (
-        <div style={{ display: "flex", flexDirection: "column"}}>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center"}}>
             {cardType.map(({ ph, func }) => {
                 return (<input placeholder={ph} 
                 onChange={func} 
                 style={{margin: "10px"}}
                 />)
             })}
-            <button onClick={buttonFunction}>{buttonText}</button>
+            <div style={{ padding: "0.5rem"}}>
+                <button onClick={buttonFunction} style={{ maxWidth: "200px"}}>{buttonText}</button>
+            </div>
         </div>
     )
 }

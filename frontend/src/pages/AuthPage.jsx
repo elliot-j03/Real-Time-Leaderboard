@@ -8,6 +8,7 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "fire
 import { initUserInDB, checkUserName, backendPing } from "../services/api";
 // Components
 import AuthInputBox from "../components/AuthInputBox";
+import ABContainer from "../components/AuthBoxContainer";
 import ErrorBox from "../components/ErrorBox";
 
 
@@ -165,17 +166,18 @@ function AuthPage() {
                     <div style={{ height: "5rem" }}>
                         {warning === "" ? null : <ErrorBox errMessage={warning}/>}
                     </div>
-                    <div style={{ height: "13rem", padding: "0.5rem",
+                    <div style={{ height: "15rem", padding: "1px",
                         backgroundColor: "#1e1e1e", borderRadius: "15px",
                         display: "flex", flexDirection: "column",
                         justifyContent: "center"
                     }}>
-                        <AuthInputBox
+                        <ABContainer
+                        authType={authType}
                         buttonFunction={buttonFunction} 
                         buttonText={buttonText}
                         cardType={cardType}/>
                     </div>
-                    <p>{authInput === loginFull ? "No account?" : "Back to login"}</p>
+                    <p>{authType === "login" ? "No account?" : "Back to login..."}</p>
                     <button onClick={swapAuthType}>Swap</button>
                 </div>
             </div>
