@@ -3,12 +3,16 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 // Firebase
 import { auth } from "../config/firebase";
+import { signOut } from "firebase/auth";
 // Components
-import LBBox from "../components/LeaderboardBox";
 import SubmitBox from "../components/SubmitBox";
+import Leaderboard from "../components/Leaderboard";
+import TopThree from "../components/TopThreeBox";
+import LoadingSpinner from "../components/LoadingSpinner"
 
 function LBPage({ userData }) {
     const [userList, setUserList] = useState([]);
+    const [leaders, setLeaders] = useState([]);
     const navigate = useNavigate();
 
 
@@ -16,6 +20,21 @@ function LBPage({ userData }) {
         const path = auth?.currentUser?.uid !== undefined ? `/${auth?.currentUser?.uid}` : "/";
         navigate(path);
     }
+
+    function navLogIn() {
+        navigate("/login");
+    }
+
+    const logOut = async () => {
+        try {
+            await signOut(auth);
+            navigate("/leaderboard");
+        } catch (err) {
+            console.log("[ERROR] LeaderboardPage.jsx/logOut: " + err);
+        }
+    }
+    const logInState = (auth.currentUser == null ? navLogIn : logOut);
+    
 
     // Make blank leaderboard look better
     useEffect(() => {
@@ -91,41 +110,83 @@ function LBPage({ userData }) {
             setUserList(udArr);
         }
     }, [userData]);
+
+    useEffect(() => {
+        if (userList.length > 0) {
+            setLeaders([userList[0], userList[1], userList[2]]);
+        }
+    }, [userList]);
+    
+
+    // Returns if there is no leaderboard data
     if (userData === null || userData === undefined) {
         return (
             <>
                 <div style={{ backgroundColor: "#1e1e1e", display: "flex", 
                         flexDirection: "row", justifyContent: "end", padding: "1rem"}}>
                             <button onClick={navHome}>Home</button>
+                            <button onClick={navLogIn}>Log In</button>
                     </div>
                 <div className="home-page">
-                    <button onClick={navHome}>Home</button>
                     <h1>Leaderboard</h1>
-                    <h2>The leaderboard is currently empty...</h2>
+                    <div style={{ display: "flex", flexDirection: "column"}}>
+                        <h2>The leaderboard is currently empty...</h2>
+                        {auth?.currentUser ? (
+                            <div>
+                                <SubmitBox />
+                            </div>
+                        ) : (
+                            <div style={{ height: "2rem", display: "flex", flexDirection: "column",
+                                justifyContent: "center", padding: "3rem"
+                            }}>
+                                <h3>Log in to add your score...</h3>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </>
         )
-    }else {
+        // Returns if there is leaderboard data
+    } else {
         return (
             <>
                 <div style={{ backgroundColor: "#1e1e1e", display: "flex", 
                     flexDirection: "row", justifyContent: "end", padding: "1rem"}}>
-                        <button onClick={navHome}>Home</button>
+                        <div style={{ paddingRight: "1rem" }}>
+                            <button onClick={navHome}>Home</button>
+                        </div>
+                        <button onClick={logInState} style={{ flex: "0.2", maxWidth: "10rem"}}>{
+                            auth?.currentUser ? "Log Out" : "Log In"}</button>
                 </div>
                 <div className="home-page">
                     <h1>Leaderboard</h1>
-                    <div style={{ display: "flex", flexDirection: "row" }}>
-                        <div style={{ backgroundColor: "#1e1e1e", padding: "1rem"}}>
-                            {userList.map(([uName, uScore, i]) => {
-                                return (
-                                    <LBBox index={i}
-                                    userName={uName}
-                                    userScore={uScore} />
-                                )
-                            })}
+                    <div style={{ display: "flex", flexDirection: "row", alignItems: "flex-start",
+                        backgroundColor: "#1e1e1e"
+                    }}>
+                        <div style={{ padding: "5rem", display: "flex", flexDirection: "column" }}>
+                            <TopThree leaders={leaders} />
+                            {auth?.currentUser ? (
+                                <div>
+                                    <SubmitBox />
+                                </div>
+                            ) : (
+                                <div style={{ height: "2rem", display: "flex", flexDirection: "column",
+                                    justifyContent: "center", padding: "3rem"
+                                }}>
+                                    <h3>Log in to add your score...</h3>
+                                </div>
+                            )}
                         </div>
-                        <div>
-                            <SubmitBox />
+                        <div style={{ display: "flex", flexDirection: "column" }}>
+                            <div>
+                                <Leaderboard 
+                                userList={userList}
+                                onItemSelect={null}
+                                showGradients={true}
+                                enableArrowNavigation={true}
+                                displayScrollbar={true}
+                                initialSelectedIndex={-1}/>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -134,4 +195,4 @@ function LBPage({ userData }) {
     }
 }
 
-export default LBPage
+export default LBPage;

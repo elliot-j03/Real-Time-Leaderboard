@@ -7,7 +7,6 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "fire
 // API
 import { initUserInDB, checkUserName, backendPing } from "../services/api";
 // Components
-import AuthInputBox from "../components/AuthInputBox";
 import ABContainer from "../components/AuthBoxContainer";
 import ErrorBox from "../components/ErrorBox";
 
@@ -77,28 +76,29 @@ function AuthPage() {
                         const code = err.code;
                         switch (code) {
                             case "auth/email-already-exists":
-                                setWarning("This email is already in use...");
+                                setWarning("This email is already in use");
                                 break;
                             case "auth/invalid-email":
-                                setWarning("Please enter a valid email...");
+                                setWarning("Please enter a valid email");
                                 break;
                             case "auth/weak-password":
-                                setWarning("Your password must be atleast 6 characters...");
+                                setWarning("Your password must be atleast 6 characters");
                                 break;
                             case "auth/missing-password":
-                                setWarning("Please enter a password...");
+                                setWarning("Please enter a password");
                                 break;
                         }
                         console.log("[ERROR] AuthPage.jsx/createUser: " + err);
                     }
                 } else {
-                    setWarning("Please ensure your passwords match...");
+                    setWarning("Please ensure your passwords match");
                 }
             } else {
-                setWarning("That username is already taken...");
+                setWarning("That username is already taken");
             }
         } else {
-            setWarning("Cannot create a new account at this time...");
+            setWarning("Due to an issue with the server, you cannot create an account at the moment");
+            console.log("[ERROR] AuthPage.jsx/createUser: The backend server is not running");
         }
     };
 
@@ -112,19 +112,20 @@ function AuthPage() {
                 const code = err.code
                 switch (code) {
                     case "auth/invalid-credential":
-                        setWarning("The email or password is incorrect...");
+                        setWarning("The email or password is incorrect");
                         break;
                     case "auth/invalid-email":
-                        setWarning("Please enter a valid email...");
+                        setWarning("Please enter a valid email");
                         break;
                     case "auth/missing-password":
-                        setWarning("Please enter a password...");
+                        setWarning("Please enter a password");
                         break;
                 }
                 console.log("[ERROR] AuthPage.jsx/logIn: " + err);
             }
         } else {
-            setWarning("Cannot log in at this time...");
+            setWarning("Due to an issue with the server, you cannot login at the moment");
+            console.log("[ERROR] AuthPage.jsx/createUser: The backend server is not running");
         }
     };
 

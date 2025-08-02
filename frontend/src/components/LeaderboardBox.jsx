@@ -1,14 +1,15 @@
 import LBRow from "./LeaderboardRow"
 
-function LBBox({ index, userName, userScore }) {
+function LBBox({ pos, userName, userScore, colourBoxes }) {
+
     return (
-        <div style={{ padding: "3px", backgroundColor: index === 1 ? "#c19a36ff" : 
-            index === 2 ? "#989898ff" :
-            index === 3 ? "#6c421eff" :
-            "#141414ff"
+        <div style={{ padding: "3px", backgroundColor: (pos === 1 && colourBoxes ? "#c19a36ff" : 
+            pos === 2  && colourBoxes ? "#989898ff" :
+            pos === 3 && colourBoxes ? "#6c421eff" :
+            "#141414ff")
         }}>
             <div style={{ backgroundColor: "#1e1e1e", display: "flex", flexDirection: "column" }}>
-                <LBRow pos={index} user={userName} score={userScore}/>
+                <LBRow pos={pos} user={userName} score={userScore} colourBoxes={colourBoxes}/>
             </div>
         </div>
     )
