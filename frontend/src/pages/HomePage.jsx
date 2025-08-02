@@ -6,6 +6,8 @@ import { auth } from "../config/firebase";
 import { signOut } from "firebase/auth";
 // Components
 import { UserContext } from "../components/UserProvider";
+import LoadingSpinner from "../components/LoadingSpinner";
+import LBRow from "../components/LeaderboardRow";
 
 
 function HomePage() {
@@ -32,25 +34,48 @@ function HomePage() {
     const logInState = (auth.currentUser == null ? navLogIn : logOut);
     const logInStateText = (auth.currentUser == null ? "Log In" : "Log Out");
 
-    return (
-        <>
-            <div style={{ backgroundColor: "#1e1e1e", display: "flex", 
-                flexDirection: "row", justifyContent: "end", padding: "1rem"}}>
-                    <div style={{ paddingRight: "1rem" }}>
-                        <button onClick={navLeaderboard} >View Leaderboard</button>
-                    </div>
-                    <div style={{ paddingLeft: "1rem" }}>
-                        <button onClick={logInState} style={{ flex: "0.2"}}>{logInStateText}</button>
-                    </div>
-            </div>
-            <div className="home-page">
-                <h1>Home Page</h1>
-                <h2>{userName === "{undefined user}" ? 
-                "Log in to add your score!" : "Welcome " + userName}</h2>
-                <h3>View the leaderboard to see the current highest ranking players...</h3>
-            </div>
-        </>
-    )
+    
+    if (logInState === logOut && userName === "{undefined user}") {
+        return (
+            <>
+                <div style={{ backgroundColor: "#1e1e1e", display: "flex", 
+                    flexDirection: "row", justifyContent: "end", padding: "1rem"}}>
+                        <div style={{ paddingRight: "1rem" }}>
+                            <button onClick={navLeaderboard} >View Leaderboard</button>
+                        </div>
+                        <div style={{ paddingLeft: "1rem" }}>
+                            <button onClick={logInState} style={{ flex: "0.2"}}>{logInStateText}</button>
+                        </div>
+                </div>
+                <div className="home-page">
+                    <h1>Home Page</h1>
+                    <LoadingSpinner />
+                </div>
+            </>
+        )
+    } else {
+        return (
+            <>
+                <div style={{ backgroundColor: "#1e1e1e", display: "flex", 
+                    flexDirection: "row", justifyContent: "end", padding: "1rem"}}>
+                        <div style={{ paddingRight: "1rem" }}>
+                            <button onClick={navLeaderboard} >View Leaderboard</button>
+                        </div>
+                        <div style={{ paddingLeft: "1rem" }}>
+                            <button onClick={logInState} style={{ flex: "0.2"}}>{logInStateText}</button>
+                        </div>
+                </div>
+                <div className="home-page">
+                    <h1>Home Page</h1>
+                    <h2>{userName === "{undefined user}" ? 
+                    "Log in to add your score!" : "Welcome " + userName}</h2>
+                    {userName === "{undefined user}" ?
+                    null : <LBRow pos={1} user={userName} score={"TEMP"}/>}
+                    <h3>View the leaderboard to see the current ranking of other players...</h3>
+                </div>
+            </>
+        )
+    }
 }
 
 export default HomePage;

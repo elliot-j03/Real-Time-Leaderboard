@@ -91,28 +91,47 @@ function LBPage({ userData }) {
             setUserList(udArr);
         }
     }, [userData]);
-
-
-    return (
-        <div className="home-page">
-            <button onClick={navHome}>Home</button>
-            <h1>Leaderboard</h1>
-            <div style={{ display: "flex", flexDirection: "row" }}>
-                <div style={{ backgroundColor: "#1e1e1e", padding: "1rem"}}>
-                    {userList.map(([uName, uScore, i]) => {
-                        return (
-                            <LBBox index={i}
-                            userName={uName}
-                            userScore={uScore} />
-                        )
-                    })}
+    if (userData === null || userData === undefined) {
+        return (
+            <>
+                <div style={{ backgroundColor: "#1e1e1e", display: "flex", 
+                        flexDirection: "row", justifyContent: "end", padding: "1rem"}}>
+                            <button onClick={navHome}>Home</button>
+                    </div>
+                <div className="home-page">
+                    <button onClick={navHome}>Home</button>
+                    <h1>Leaderboard</h1>
+                    <h2>The leaderboard is currently empty...</h2>
                 </div>
-                <div>
-                    <SubmitBox />
+            </>
+        )
+    }else {
+        return (
+            <>
+                <div style={{ backgroundColor: "#1e1e1e", display: "flex", 
+                    flexDirection: "row", justifyContent: "end", padding: "1rem"}}>
+                        <button onClick={navHome}>Home</button>
                 </div>
-            </div>
-        </div>
-    )
+                <div className="home-page">
+                    <h1>Leaderboard</h1>
+                    <div style={{ display: "flex", flexDirection: "row" }}>
+                        <div style={{ backgroundColor: "#1e1e1e", padding: "1rem"}}>
+                            {userList.map(([uName, uScore, i]) => {
+                                return (
+                                    <LBBox index={i}
+                                    userName={uName}
+                                    userScore={uScore} />
+                                )
+                            })}
+                        </div>
+                        <div>
+                            <SubmitBox />
+                        </div>
+                    </div>
+                </div>
+            </>
+        )
+    }
 }
 
 export default LBPage

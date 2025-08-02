@@ -10,3 +10,18 @@
   align-items: center;
 }
 
+.spinner {
+  animation: rotate 1s linear infinite;
+  height: 30px;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
