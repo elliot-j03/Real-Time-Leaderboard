@@ -97,10 +97,10 @@ function HomePage({ userData }) {
                         </div>
                 </div>
                 <div className="home-page">
-                    <h1>Home Page</h1>
-                    <h2>{"Error fetching username" }</h2>
+                    <h1>Welcome</h1>
+                    <h3>{"Error fetching username" }</h3>
                     {userName === "{undefined user}" ?
-                    null : <LBRow pos={1} user={userName} score={"TEMP"}/>}
+                    null : <LBRow pos={"null"} user={userName} score={"null"}/>}
                     <h3>View the leaderboard to see the current ranking of other players...</h3>
                     <div style={{ paddingRight: "1rem" }}>
                             <button onClick={navLeaderboard} >View Leaderboard</button>
@@ -119,11 +119,16 @@ function HomePage({ userData }) {
                         </div>
                 </div>
                 <div className="home-page">
-                    <h1>Home Page</h1>
-                    <h2>{userName === "{undefined user}" ? 
-                    "Welcome to the leaderboard" : "Welcome " + userName}</h2>
+                    <h1>{userName === "{undefined user}" ? 
+                    "Welcome to the leaderboard" : "Welcome " + userName}</h1>
                     { userRow === null ?
-                    null : <LBRow pos={userRow[2]} user={userRow[0]} score={userRow[1]}/>}
+                    null : (
+                        <div style={{ display: "flex", flexDirection: "row"}}>
+                            <h2 style={{ paddingRight: "1rem"}}>Score: {userRow[1]}</h2>
+                            <h2 style={{ paddingLeft: "1rem"}}>Position: {userRow[2]}</h2>
+                        </div>
+                    )
+                        }
                     <h3>View the leaderboard to see the current ranking of other players...</h3>
                     <div style={{ paddingRight: "1rem" }}>
                         <button onClick={navLeaderboard} >View Leaderboard</button>

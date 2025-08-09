@@ -94,10 +94,12 @@ function LBPage({ userData }) {
                 </div>
                 <div className="home-page">
                     <h1>Leaderboard</h1>
-                    <div style={{ display: "flex", flexDirection: "row", alignItems: "flex-start",
+                    <div style={{ display: "flex", flexDirection: "row",
                         backgroundColor: "#1e1e1e"
                     }}>
-                        <div style={{ padding: "5rem", display: "flex", flexDirection: "column" }}>
+                        <div style={{ padding: "5rem", paddingTop: "1rem", paddingBottom: "1rem",
+                            display: "flex", flexDirection: "column",
+                         }}>
                             <TopThree leaders={leaders} />
                             {auth?.currentUser ? (
                                 <div>

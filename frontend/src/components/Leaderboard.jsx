@@ -1,7 +1,7 @@
 // React
 import { useRef, useState, useEffect } from 'react';
 // Animations
-import { motion, useInView } from 'framer-motion';
+import { AnimatePresence, motion, useInView } from 'framer-motion';
 // Components
 import LBBox from './LeaderboardBox';
 
@@ -10,13 +10,16 @@ const LeaderboardRow = ({ children, delay = 0, index, onMouseEnter, onClick }) =
   const inView = useInView(ref, { amount: 0.5, triggerOnce: false });
   return (
     <motion.div
+      layout="position"
       ref={ref}
       data-index={index}
       onMouseEnter={onMouseEnter}
       onClick={onClick}
       initial={{ scale: 0.7, opacity: 0 }}
       animate={inView ? { scale: 1, opacity: 1 } : { scale: 0.7, opacity: 0 }}
-      transition={{ duration: 0.2, delay }}
+      transition={{ duration: 0.2, delay, layout: {
+        duration: 0.5
+      } }}
       style={{ marginBottom: '1rem', cursor: 'pointer' }}
     >
       {children}
@@ -100,10 +103,11 @@ const Leaderboard = ({
             className={`scroll-list ${!displayScrollbar ? 'no-scrollbar' : ''}`}
             onScroll={handleScroll}
         >
+          <AnimatePresence>
             {userList.map(([userName, userScore, pos], index ) => {
                 return (
-                    <LeaderboardRow
-                    key={index}
+                  <LeaderboardRow
+                    key={userName}
                     delay={0.1}
                     index={index}
                     onMouseEnter={() => setSelectedIndex(index)}
@@ -119,6 +123,7 @@ const Leaderboard = ({
                     </LeaderboardRow>
                 )
             })}
+            </AnimatePresence>
         </div>
         {showGradients && (
             <>

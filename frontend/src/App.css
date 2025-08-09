@@ -10,6 +10,14 @@
   align-items: center;
 }
 
+input {
+  background-color: #343434;
+  caret-color: #eac54a;
+  border: none;
+  border-radius: 5px;
+  padding: 5px;
+}
+
 /* Loading spinner */
 .spinner {
   animation: rotate 1s linear infinite;
@@ -29,7 +37,7 @@
 
 .scroll-list-container {
   position: relative;
-  background-color: #4b4b4b;
+  background-color: #121212;
   width: 500px;
 }
 
@@ -40,6 +48,7 @@
 }
 
 .scroll-list::-webkit-scrollbar {
+  display: flex;
   width: 8px;
 }
 
@@ -48,7 +57,7 @@
 }
 
 .scroll-list::-webkit-scrollbar-thumb {
-  background: #c5c5c5;
+  background: #313131;
   border-radius: 4px;
 }
 
@@ -63,7 +72,7 @@
 
 .item {
   padding: 3px;
-  background-color: #1e1e1e;
+  background-color: #141414;
   border-radius: 8px;
   margin-bottom: 1rem;
 }

@@ -8,40 +8,44 @@ import { submitScore } from "../scripts/api";
 import ErrorBox from "./ErrorBox";
 
 function SubmitBox() {
-    const [proposedScore, setProposedScore] = useState(null);
+    const [proposedScore, setProposedScore] = useState("");
     const [warning, setWarning] = useState("");
-
-    function updateScore(e) {
-        setProposedScore(e.target.value);
-    }
     
     // TODO: Deal with empty input
     async function handleSubmit() {
-        try {
-            const scoreAsInt = Number(proposedScore)
-            const token = await auth.currentUser.getIdToken();
-            const uid = auth.currentUser.uid;
-            const response = await submitScore(scoreAsInt, token, uid);
-            if (response.status === "success") {
-                setWarning("");
-                console.log("[RESPONSE] SubmitBox.jsx/handleSubmit: "+response);
-            } else {
-                setWarning("You dont have permission to do that"); 
+        setWarning("");
+        if (proposedScore !== null && proposedScore !== "") {
+            try {
+                const scoreAsInt = Number(proposedScore)
+                const token = await auth.currentUser.getIdToken();
+                const uid = auth.currentUser.uid;
+                const response = await submitScore(scoreAsInt, token, uid);
+                if (response.status === "success") {
+                    setWarning("");
+                    console.log("[RESPONSE] SubmitBox.jsx/handleSubmit: "+response);
+                } else {
+                    setWarning("You dont have permission to do that"); 
+                }
+                setProposedScore("");
+            } catch (err) {
+                console.log("[ERROR] SubmitBox.jsx/handleSubmit: " + err);
             }
-        } catch (err) {
-            console.log("[ERROR] SubmitBox.jsx/handleSubmit: " + err);
+        } else {
+            setWarning("Please enter a valid score");
         }
     }
-
+    
     return (
         <div style={{ display: "flex", flexDirection: "column",
         justifyContent: "center", alignItems: "center",
-        padding: "1rem", paddingTop: "2rem", paddingBottom: "2rem" }}>
+        padding: "1rem", paddingBottom: "2rem" }}>
+            <div style={{ height: "4rem"}}>
+                {warning === "" ? null : <ErrorBox errMessage={warning}/>}
+            </div>
             <div style={{ padding: "1rem" }}>
-                <input onChange={updateScore} placeholder="score"/>
+                <input value={proposedScore} onChange={e => setProposedScore(e.target.value)} placeholder="score"/>
             </div>
             <button onClick={handleSubmit}>Submit Score</button>
-            {warning === "" ? null : <ErrorBox errMessage={warning}/>}
         </div>
     )
 }
