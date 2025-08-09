@@ -5,7 +5,7 @@ function LBRow({ pos, user, score , colourBoxes}) {
             pos === 2 && colourBoxes ? "#bbbbbbff" : 
             pos === 3 && colourBoxes ? "#915827ff" : 
             "#1e1e1e") , minHeight: "70px",
-         display: "flex", flexDirection: "row", alignItems: "center" }}>
+         display: "flex", flexDirection: "row", alignItems: "center", paddingLeft: (colourBoxes ? "0rem" : "0.5rem")}}>
             <div style={{ backgroundColor: (pos === 1 ? "#ffd05aff" :
             pos === 2 ? "#bbbbbbff" : 
             pos === 3 ? "#915827ff" : 

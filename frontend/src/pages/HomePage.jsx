@@ -8,10 +8,14 @@ import { signOut } from "firebase/auth";
 import { UserContext } from "../components/UserProvider";
 import LoadingSpinner from "../components/LoadingSpinner";
 import LBRow from "../components/LeaderboardRow";
+// Functions
+import { posCalc } from "../scripts/positionCalc";
 
 
-function HomePage() {
+function HomePage({ userData }) {
     const [fetchedUser, setFetchedUser] = useState(false);
+    const [userList, setUserList] = useState([]);
+    const [userRow, setUserRow] = useState(null);
     const { userName } = useContext(UserContext);
     const navigate = useNavigate();
 
@@ -44,6 +48,27 @@ function HomePage() {
 
     const logInState = (auth.currentUser == null ? navLogIn : logOut);
     const logInStateText = (auth.currentUser == null ? "Log In" : "Log Out");
+
+    useEffect(() => {
+            if (userData) {
+                const udArr = posCalc(userData)
+                setUserList(udArr);
+            }
+        }, [userData]);
+
+    useEffect(() => {
+        if (userName !== "{undefined user}") {
+            for (let i = 0; i < userList.length; i++) {
+                if (userList[i][0] === userName) {
+                    setUserRow(userList[i]);
+                    break;
+                }
+            }
+        } else{
+            setUserRow(null);
+        }
+    }, [userList, userName])
+
 
     // Displays while fetching the username
     if (logInState === logOut && userName === "{undefined user}" && !fetchedUser) {
@@ -97,8 +122,8 @@ function HomePage() {
                     <h1>Home Page</h1>
                     <h2>{userName === "{undefined user}" ? 
                     "Welcome to the leaderboard" : "Welcome " + userName}</h2>
-                    {userName === "{undefined user}" ?
-                    null : <LBRow pos={1} user={userName} score={"TEMP"}/>}
+                    { userRow === null ?
+                    null : <LBRow pos={userRow[2]} user={userRow[0]} score={userRow[1]}/>}
                     <h3>View the leaderboard to see the current ranking of other players...</h3>
                     <div style={{ paddingRight: "1rem" }}>
                         <button onClick={navLeaderboard} >View Leaderboard</button>

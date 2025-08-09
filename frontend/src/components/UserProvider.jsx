@@ -3,7 +3,7 @@ import { useState, useEffect, createContext } from "react";
 // Firebase
 import { auth } from "../config/firebase";
 // API
-import { getUserName } from "../services/api";
+import { getUserName } from "../scripts/api";
 
 export const UserContext = createContext();
 

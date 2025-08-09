@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { auth } from "../config/firebase";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 // API
-import { initUserInDB, checkUserName, backendPing } from "../services/api";
+import { initUserInDB, checkUserName, backendPing } from "../scripts/api";
 // Components
 import ABContainer from "../components/AuthBoxContainer";
 import ErrorBox from "../components/ErrorBox";

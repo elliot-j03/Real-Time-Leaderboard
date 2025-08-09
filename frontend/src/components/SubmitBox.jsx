@@ -3,7 +3,7 @@ import { useState } from "react";
 // Firebase
 import { auth } from "../config/firebase";
 // API
-import { submitScore } from "../services/api";
+import { submitScore } from "../scripts/api";
 // Components
 import ErrorBox from "./ErrorBox";
 
