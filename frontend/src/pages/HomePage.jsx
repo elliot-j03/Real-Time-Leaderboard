@@ -8,6 +8,7 @@ import { signOut } from "firebase/auth";
 import { UserContext } from "../components/UserProvider";
 import LoadingSpinner from "../components/miscellaneous/LoadingSpinner";
 import LBRow from "../components/leaderboard/LeaderboardRow";
+import SearchBar from "../components/miscellaneous/SearchBar";
 // Functions
 import { posCalc } from "../scripts/positionCalc";
 
@@ -28,6 +29,7 @@ function HomePage({ userData }) {
         return () => clearTimeout(timer);
     }, [userName]);
 
+    // Log out
     const logOut = async () => {
         try {
             await signOut(auth);
@@ -37,18 +39,21 @@ function HomePage({ userData }) {
         }
     };
 
+    // Nav to log in page
     function navLogIn() {
         navigate("/login");
     }
 
+    // Nav to leaderboard page
     function navLeaderboard() {
-        const path = auth?.currentUser?.uid !== undefined ? `/leaderboard/${auth?.currentUser?.uid}` : "/leaderboard";
+        const path = auth?.currentUser?.uid !== undefined ? `/leaderboard/user-logged-in=${auth?.currentUser?.uid}` : "/leaderboard";
         navigate(path);
     }
 
     const logInState = (auth.currentUser == null ? navLogIn : logOut);
     const logInStateText = (auth.currentUser == null ? "Log In" : "Log Out");
 
+    // Sets calcs the positions of users
     useEffect(() => {
             if (userData) {
                 const udArr = posCalc(userData)
@@ -56,6 +61,7 @@ function HomePage({ userData }) {
             }
         }, [userData]);
 
+    // Finds user row corresponding to logged in user
     useEffect(() => {
         if (userName !== "{undefined user}") {
             for (let i = 0; i < userList.length; i++) {
@@ -69,13 +75,13 @@ function HomePage({ userData }) {
         }
     }, [userList, userName])
 
-
     // Displays while fetching the username
     if (logInState === logOut && userName === "{undefined user}" && !fetchedUser) {
         return (
             <>
                 <div style={{ backgroundColor: "#1e1e1e", display: "flex", 
                     flexDirection: "row", justifyContent: "end", padding: "1rem"}}>
+                        <SearchBar userData={userData}/>
                         <div style={{ paddingLeft: "1rem" }}>
                             <button onClick={logInState} style={{ flex: "0.2"}}>{logInStateText}</button>
                         </div>
@@ -93,6 +99,7 @@ function HomePage({ userData }) {
             <>
                 <div style={{ backgroundColor: "#1e1e1e", display: "flex", 
                     flexDirection: "row", justifyContent: "end", padding: "1rem"}}>
+                        <SearchBar userData={userData}/>
                         <div style={{ paddingLeft: "1rem" }}>
                             <button onClick={logInState} style={{ flex: "0.2"}}>{logInStateText}</button>
                         </div>
@@ -116,6 +123,7 @@ function HomePage({ userData }) {
             <>
                 <div style={{ backgroundColor: "#1e1e1e", display: "flex", 
                     flexDirection: "row", justifyContent: "end", padding: "1rem"}}>
+                        <SearchBar userData={userData}/>
                         <div style={{ paddingLeft: "1rem" }}>
                             <button onClick={logInState} style={{ flex: "0.2"}}>{logInStateText}</button>
                         </div>

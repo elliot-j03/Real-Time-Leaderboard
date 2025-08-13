@@ -11,7 +11,6 @@ import ABContainer from "../components/auth/AuthBoxContainer";
 import ErrorBox from "../components/miscellaneous/ErrorBox";
 
 
-// TODO: Make sure it somehow checks the database to see if the username is taken
 function AuthPage() {
     const [userName, setUserName] = useState("");
     const [email, setEmail] = useState("");
@@ -107,7 +106,7 @@ function AuthPage() {
         if (await backendCheck()) {
             try {
                 await signInWithEmailAndPassword(auth, email, passWordFirst);
-                navigate(`/${auth?.currentUser?.uid}`);
+                navigate(`/user-logged-in=${auth?.currentUser?.uid}`);
             } catch (err) {
                 const code = err.code
                 switch (code) {

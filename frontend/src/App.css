@@ -33,6 +33,13 @@ input {
   }
 }
 
+/* Search magnifying glass */
+.search-img {
+  height: 20px;
+  padding-right: 0.5rem;
+  padding-left: 0.5rem;
+}
+
 /* Animated leaderboard */
 
 .scroll-list-container {

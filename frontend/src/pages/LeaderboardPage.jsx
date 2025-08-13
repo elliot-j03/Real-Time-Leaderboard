@@ -8,6 +8,7 @@ import { signOut } from "firebase/auth";
 import SubmitBox from "../components/leaderboard/SubmitBox";
 import Leaderboard from "../components/leaderboard/Leaderboard";
 import TopThree from "../components/leaderboard/TopThreeBox";
+import SearchBar from "../components/miscellaneous/SearchBar";
 // Functions
 import { posCalc } from "../scripts/positionCalc";
 
@@ -18,7 +19,7 @@ function LBPage({ userData }) {
 
 
     function navHome() {
-        const path = auth?.currentUser?.uid !== undefined ? `/${auth?.currentUser?.uid}` : "/";
+        const path = auth?.currentUser?.uid !== undefined ? `/user-logged-in=${auth?.currentUser?.uid}` : "/";
         navigate(path);
     }
 
@@ -57,9 +58,12 @@ function LBPage({ userData }) {
         return (
             <>
                 <div style={{ backgroundColor: "#1e1e1e", display: "flex", 
-                        flexDirection: "row", justifyContent: "end", padding: "1rem"}}>
-                            <button onClick={navHome}>Home</button>
-                            <button onClick={navLogIn}>Log In</button>
+                        flexDirection: "row", justifyContent: "right", padding: "1rem"}}>
+                    <SearchBar userData={userData}/>
+                    <div style={{ paddingLeft: "1rem" }}>
+                        <button onClick={navHome}>Home</button>
+                        <button onClick={navLogIn}>Log In</button>
+                    </div>
                 </div>
                 <hr />
                 <div className="home-page">
@@ -87,6 +91,7 @@ function LBPage({ userData }) {
             <>
                 <div style={{ backgroundColor: "#1e1e1e", display: "flex", 
                     flexDirection: "row", justifyContent: "end", padding: "1rem"}}>
+                        <SearchBar userData={userData}/>
                         <div style={{ paddingRight: "1rem" }}>
                             <button onClick={navHome}>Home</button>
                         </div>

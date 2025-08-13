@@ -1,3 +1,4 @@
+// Images
 import spinner from "../../assets/loading_spinner.png";
 
 function LoadingSpinner() {

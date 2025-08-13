@@ -11,6 +11,7 @@ import './App.css'
 import AuthPage from './pages/AuthPage';
 import HomePage from './pages/HomePage';
 import LBPage from './pages/LeaderboardPage';
+import UserPage from './pages/UserPage';
 
 function App() {
   const [userUID, setUserUID] = useState("");
@@ -36,32 +37,33 @@ function App() {
   },[]);
 
 
-  const maxInactivity = 30 * 60 * 1000
-  function resetActivityTimer() {
-    if (inactivityTimer === null) {
-      const timer = setTimeout(() => {
-        signOut(auth);
-        console.log("Signed out due to inactivity");
-      }, maxInactivity);
-      setInactivityTimer(timer);
-    } else {
-      clearTimeout(inactivityTimer);
-    }
-  }
+  // const maxInactivity = 30 * 60 * 1000
+  // function resetActivityTimer() {
+  //   if (inactivityTimer === null) {
+  //     const timer = setTimeout(() => {
+  //       signOut(auth);
+  //       console.log("Signed out due to inactivity");
+  //     }, maxInactivity);
+  //     setInactivityTimer(timer);
+  //   } else {
+  //     clearTimeout(inactivityTimer);
+  //   }
+  // }
   
-  ["click", "mousemove", "keydown", "scroll", "touchstart"].forEach(evt => {
-    window.addEventListener(evt, resetActivityTimer);
-  });
-  resetActivityTimer();
+  // ["click", "mousemove", "keydown", "scroll", "touchstart"].forEach(evt => {
+  //   window.addEventListener(evt, resetActivityTimer);
+  // });
+  // resetActivityTimer();
 
 
 
   return (
     <BrowserRouter>
       <Routes>
-        <Route path={userUID ? `/${userUID}` : "/"} element={<HomePage userData={userData} />}/>
+        <Route path={userUID ? `/user-logged-in=${userUID}` : "/"} element={<HomePage userData={userData} />}/>
         <Route path='/login' element={<AuthPage />}/>
-        <Route path={userUID ? `/leaderboard/${userUID}` : "/leaderboard"} element={<LBPage userData={userData}/>}/>
+        <Route path={userUID ? `/leaderboard/user-logged-in=${userUID}` : "/leaderboard/"} element={<LBPage userData={userData}/>}/>
+        <Route path={userUID ? `/user/user-logged-in=${userUID}` : "/user/"} element={<UserPage />}/>
       </Routes>
     </BrowserRouter>
   )
