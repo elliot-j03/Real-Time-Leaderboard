@@ -1,10 +1,10 @@
 // React
 import { useEffect, useState } from 'react';
-import { onValue, ref } from "firebase/database";
+import { onValue, ref, set } from "firebase/database";
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 // Firebase
 import { auth, db } from './config/firebase';
-import { onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
 // CSS
 import './App.css'
 // Pages
@@ -15,6 +15,7 @@ import LBPage from './pages/LeaderboardPage';
 function App() {
   const [userUID, setUserUID] = useState("");
   const [userData, setUserData] = useState("");
+  const [inactivityTimer, setInactivityTimer] = useState(null);
   
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (userUID) => {
@@ -33,6 +34,27 @@ function App() {
 
       return () => unsubscribe();
   },[]);
+
+
+  const maxInactivity = 30 * 60 * 1000
+  function resetActivityTimer() {
+    if (inactivityTimer === null) {
+      const timer = setTimeout(() => {
+        signOut(auth);
+        console.log("Signed out due to inactivity");
+      }, maxInactivity);
+      setInactivityTimer(timer);
+    } else {
+      clearTimeout(inactivityTimer);
+    }
+  }
+  
+  ["click", "mousemove", "keydown", "scroll", "touchstart"].forEach(evt => {
+    window.addEventListener(evt, resetActivityTimer);
+  });
+  resetActivityTimer();
+
+
 
   return (
     <BrowserRouter>

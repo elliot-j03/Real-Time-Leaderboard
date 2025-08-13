@@ -5,9 +5,9 @@ import { useNavigate } from "react-router-dom";
 import { auth } from "../config/firebase";
 import { signOut } from "firebase/auth";
 // Components
-import SubmitBox from "../components/SubmitBox";
-import Leaderboard from "../components/Leaderboard";
-import TopThree from "../components/TopThreeBox";
+import SubmitBox from "../components/leaderboard/SubmitBox";
+import Leaderboard from "../components/leaderboard/Leaderboard";
+import TopThree from "../components/leaderboard/TopThreeBox";
 // Functions
 import { posCalc } from "../scripts/positionCalc";
 
@@ -60,7 +60,8 @@ function LBPage({ userData }) {
                         flexDirection: "row", justifyContent: "end", padding: "1rem"}}>
                             <button onClick={navHome}>Home</button>
                             <button onClick={navLogIn}>Log In</button>
-                    </div>
+                </div>
+                <hr />
                 <div className="home-page">
                     <h1>Leaderboard</h1>
                     <div style={{ display: "flex", flexDirection: "column"}}>
@@ -92,6 +93,7 @@ function LBPage({ userData }) {
                         <button onClick={logInState} style={{ flex: "0.2", maxWidth: "10rem"}}>{
                             auth?.currentUser ? "Log Out" : "Log In"}</button>
                 </div>
+                <hr />
                 <div className="home-page">
                     <h1>Leaderboard</h1>
                     <div style={{ display: "flex", flexDirection: "row",
@@ -107,22 +109,20 @@ function LBPage({ userData }) {
                                 </div>
                             ) : (
                                 <div style={{ height: "2rem", display: "flex", flexDirection: "column",
-                                    justifyContent: "center", padding: "3rem"
+                                    justifyContent: "center", padding: "3rem", alignItems: "center"
                                 }}>
                                     <h3>Log in to add your score...</h3>
                                 </div>
                             )}
                         </div>
                         <div style={{ display: "flex", flexDirection: "column" }}>
-                            <div>
-                                <Leaderboard 
-                                userList={userList}
-                                onItemSelect={null}
-                                showGradients={true}
-                                enableArrowNavigation={true}
-                                displayScrollbar={true}
-                                initialSelectedIndex={-1}/>
-                            </div>
+                            <Leaderboard 
+                            userList={userList}
+                            onItemSelect={null}
+                            showGradients={true}
+                            enableArrowNavigation={true}
+                            displayScrollbar={true}
+                            initialSelectedIndex={-1}/>
                         </div>
                     </div>
                 </div>

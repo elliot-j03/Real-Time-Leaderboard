@@ -1,11 +1,11 @@
 // React
 import { useState } from "react";
 // Firebase
-import { auth } from "../config/firebase";
+import { auth } from "../../config/firebase";
 // API
-import { submitScore } from "../scripts/api";
+import { submitScore } from "../../scripts/api";
 // Components
-import ErrorBox from "./ErrorBox";
+import ErrorBox from "../miscellaneous/ErrorBox";
 
 function SubmitBox() {
     const [proposedScore, setProposedScore] = useState("");

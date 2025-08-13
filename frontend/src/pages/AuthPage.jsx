@@ -7,8 +7,8 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "fire
 // API
 import { initUserInDB, checkUserName, backendPing } from "../scripts/api";
 // Components
-import ABContainer from "../components/AuthBoxContainer";
-import ErrorBox from "../components/ErrorBox";
+import ABContainer from "../components/auth/AuthBoxContainer";
+import ErrorBox from "../components/miscellaneous/ErrorBox";
 
 
 // TODO: Make sure it somehow checks the database to see if the username is taken
@@ -158,11 +158,12 @@ function AuthPage() {
     return (
         <>
             <div style={{ backgroundColor: "#1e1e1e", display: "flex", 
-                flexDirection: "row", justifyContent: "left", padding: "1rem"}}>
-                    <button onClick={returnToHome} style={{ flex: "0.2"}}>Home</button>
+                flexDirection: "row", justifyContent: "end", padding: "1rem"}}>
+                    <button onClick={returnToHome} style={{ flex: "0.2", maxWidth: "150px"}}>Home</button>
             </div>
+            <hr />
             <div className="home-page">
-                <h1>Login Page</h1>
+                <h1>Login to the Leaderboard...</h1>
                 <div style={{ display: "flex", flexDirection: "column", alignItems: "center"}}>
                     <div style={{ height: "5rem" }}>
                         {warning === "" ? null : <ErrorBox errMessage={warning}/>}
@@ -170,7 +171,8 @@ function AuthPage() {
                     <div style={{ height: "15rem", padding: "1px",
                         backgroundColor: "#1e1e1e", borderRadius: "15px",
                         display: "flex", flexDirection: "column",
-                        justifyContent: "center"
+                        justifyContent: "center", border: "1px solid",
+                        borderColor: "#ffffff"
                     }}>
                         <ABContainer
                         authType={authType}

@@ -1,4 +1,4 @@
-import spinner from "../assets/loading_spinner.png";
+import spinner from "../../assets/loading_spinner.png";
 
 function LoadingSpinner() {
     return (

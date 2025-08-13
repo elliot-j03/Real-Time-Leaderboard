@@ -117,7 +117,9 @@ const Leaderboard = ({
                             onItemSelect(item, index);
                         }
                     }} >
-                        <div className={`item ${selectedIndex === index ? 'selected' : ''}`}>
+                        <div className={`item ${selectedIndex === index ? 'selected' : ''}`}
+                          style={{ padding: "0.1rem"}}
+                        >
                             <LBBox pos={pos} userName={userName} userScore={userScore}/>
                         </div>
                     </LeaderboardRow>

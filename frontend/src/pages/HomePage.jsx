@@ -6,8 +6,8 @@ import { auth } from "../config/firebase";
 import { signOut } from "firebase/auth";
 // Components
 import { UserContext } from "../components/UserProvider";
-import LoadingSpinner from "../components/LoadingSpinner";
-import LBRow from "../components/LeaderboardRow";
+import LoadingSpinner from "../components/miscellaneous/LoadingSpinner";
+import LBRow from "../components/leaderboard/LeaderboardRow";
 // Functions
 import { posCalc } from "../scripts/positionCalc";
 
@@ -80,6 +80,7 @@ function HomePage({ userData }) {
                             <button onClick={logInState} style={{ flex: "0.2"}}>{logInStateText}</button>
                         </div>
                 </div>
+                <hr />
                 <div className="home-page">
                     <h1>Home Page</h1>
                     <LoadingSpinner />
@@ -96,8 +97,9 @@ function HomePage({ userData }) {
                             <button onClick={logInState} style={{ flex: "0.2"}}>{logInStateText}</button>
                         </div>
                 </div>
+                <hr />
                 <div className="home-page">
-                    <h1>Welcome</h1>
+                    <h1>Welcome to the leaderboard</h1>
                     <h3>{"Error fetching username" }</h3>
                     {userName === "{undefined user}" ?
                     null : <LBRow pos={"null"} user={userName} score={"null"}/>}
@@ -118,6 +120,7 @@ function HomePage({ userData }) {
                             <button onClick={logInState} style={{ flex: "0.2"}}>{logInStateText}</button>
                         </div>
                 </div>
+                <hr />
                 <div className="home-page">
                     <h1>{userName === "{undefined user}" ? 
                     "Welcome to the leaderboard" : "Welcome " + userName}</h1>

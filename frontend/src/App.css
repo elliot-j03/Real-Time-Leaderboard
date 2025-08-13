@@ -38,6 +38,8 @@ input {
 .scroll-list-container {
   position: relative;
   background-color: #121212;
+  border: 1px, solid;
+  border-color: #2e2e2e;
   width: 500px;
 }
 
