@@ -16,7 +16,7 @@ import UserPage from './pages/UserPage';
 function App() {
   const [userUID, setUserUID] = useState("");
   const [userData, setUserData] = useState("");
-  const [inactivityTimer, setInactivityTimer] = useState(null);
+  // const [inactivityTimer, setInactivityTimer] = useState(null);
   
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (userUID) => {

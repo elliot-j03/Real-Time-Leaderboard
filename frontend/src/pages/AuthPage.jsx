@@ -156,9 +156,9 @@ function AuthPage() {
 
     return (
         <>
-            <div style={{ backgroundColor: "#1e1e1e", display: "flex", 
-                flexDirection: "row", justifyContent: "end", padding: "1rem"}}>
-                    <button onClick={returnToHome} style={{ flex: "0.2", maxWidth: "150px"}}>Home</button>
+            <div style={{ backgroundColor: "#242424", display: "flex", 
+                flexDirection: "row", justifyContent: "left", padding: "1rem"}}>
+                    <button onClick={returnToHome}>Home</button>
             </div>
             <hr />
             <div className="home-page">

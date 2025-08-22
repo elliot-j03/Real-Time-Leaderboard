@@ -57,12 +57,21 @@ function LBPage({ userData }) {
     if (userData === null || userData === undefined) {
         return (
             <>
-                <div style={{ backgroundColor: "#1e1e1e", display: "flex", 
-                        flexDirection: "row", justifyContent: "right", padding: "1rem"}}>
-                    <SearchBar userData={userData}/>
-                    <div style={{ paddingLeft: "1rem" }}>
-                        <button onClick={navHome}>Home</button>
-                        <button onClick={navLogIn}>Log In</button>
+                <div style={{ display: "flex", flexDirection: "row", justifyContent: "center",
+                    alignItems: "center"
+                }}>
+                    <div style={{ justifyContent: "center", flex: "1", paddingLeft: "1rem" }}>
+                        <div style={{ paddingRight: "1rem" }}>
+                                <button onClick={navHome}>Home</button>
+                        </div>
+                    </div>
+                    <div style={{ backgroundColor: "#242424", display: "flex", 
+                        justifyContent: "center", padding: "1rem", flex: "5"}}>
+                            <SearchBar userData={userData}/>
+                    </div>
+                    <div style={{ flex: "1", display: "flex", justifyContent: "end", paddingRight: "1rem"}}>
+                        <button onClick={logInState} style={{ maxWidth: "10rem" }}>
+                            { auth?.currentUser ? "Log Out" : "Log In"}</button>
                     </div>
                 </div>
                 <hr />
@@ -89,14 +98,22 @@ function LBPage({ userData }) {
     } else {
         return (
             <>
-                <div style={{ backgroundColor: "#1e1e1e", display: "flex", 
-                    flexDirection: "row", justifyContent: "end", padding: "1rem"}}>
-                        <SearchBar userData={userData}/>
+                <div style={{ display: "flex", flexDirection: "row", justifyContent: "center",
+                    alignItems: "center"
+                }}>
+                    <div style={{ justifyContent: "center", flex: "1", paddingLeft: "1rem" }}>
                         <div style={{ paddingRight: "1rem" }}>
-                            <button onClick={navHome}>Home</button>
+                                <button onClick={navHome}>Home</button>
                         </div>
-                        <button onClick={logInState} style={{ flex: "0.2", maxWidth: "10rem"}}>{
-                            auth?.currentUser ? "Log Out" : "Log In"}</button>
+                    </div>
+                    <div style={{ backgroundColor: "#242424", display: "flex", 
+                        justifyContent: "center", padding: "1rem", flex: "5"}}>
+                            <SearchBar userData={userData}/>
+                    </div>
+                    <div style={{ flex: "1", display: "flex", justifyContent: "end", paddingRight: "1rem"}}>
+                        <button onClick={logInState} style={{ maxWidth: "10rem" }}>
+                            { auth?.currentUser ? "Log Out" : "Log In"}</button>
+                    </div>
                 </div>
                 <hr />
                 <div className="home-page">

@@ -18,6 +18,13 @@ input {
   padding: 5px;
 }
 
+/* Ghost Button */
+.ghost-button {
+  pointer-events: none;
+  border-color: transparent;
+  background-color: transparent;
+}
+
 /* Loading spinner */
 .spinner {
   animation: rotate 1s linear infinite;
