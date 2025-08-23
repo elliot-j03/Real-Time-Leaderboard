@@ -60,10 +60,10 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path={userUID ? `/user-logged-in=${userUID}` : "/"} element={<HomePage userData={userData} />}/>
-        <Route path='/login' element={<AuthPage />}/>
-        <Route path={userUID ? `/leaderboard/user-logged-in=${userUID}` : "/leaderboard/"} element={<LBPage userData={userData}/>}/>
-        <Route path={userUID ? `/user/user-logged-in=${userUID}` : "/user/"} element={<UserPage />}/>
+        <Route path={userUID ? "/user-logged-in/:userUID" : "/"} element={<HomePage userData={userData} />}/>
+        <Route path="/login" element={<AuthPage />}/>
+        <Route path={userUID ? "/leaderboard/user-logged-in/:userUID" : "/leaderboard/"} element={<LBPage userData={userData}/>}/>
+        <Route path={userUID ? "/user/:username/user-logged-in/:userUID" : "/user/:username/"} element={<UserPage userData={userData}/>}/>
       </Routes>
     </BrowserRouter>
   )

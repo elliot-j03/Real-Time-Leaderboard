@@ -19,7 +19,7 @@ function LBPage({ userData }) {
 
 
     function navHome() {
-        const path = auth?.currentUser?.uid !== undefined ? `/user-logged-in=${auth?.currentUser?.uid}` : "/";
+        const path = auth?.currentUser?.uid !== undefined ? `/user-logged-in/${auth?.currentUser?.uid}` : "/";
         navigate(path);
     }
 

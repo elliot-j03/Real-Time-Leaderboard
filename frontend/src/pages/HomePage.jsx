@@ -46,7 +46,7 @@ function HomePage({ userData }) {
 
     // Nav to leaderboard page
     function navLeaderboard() {
-        const path = auth?.currentUser?.uid !== undefined ? `/leaderboard/user-logged-in=${auth?.currentUser?.uid}` : "/leaderboard";
+        const path = auth?.currentUser?.uid !== undefined ? `/leaderboard/user-logged-in/${auth?.currentUser?.uid}` : "/leaderboard";
         navigate(path);
     }
 

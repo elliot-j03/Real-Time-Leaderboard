@@ -1,5 +1,8 @@
 // React
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+// Firebase
+import { auth } from "../../config/firebase";
 // Fuse
 import Fuse from "fuse.js";
 // Images
@@ -18,6 +21,13 @@ function getUserNames(users) {
 
 
 function DropDown({ searchResult }) {
+    const navigate = useNavigate();
+
+    function navUser(user) {
+        const path = auth?.currentUser?.uid !== undefined ? `/user/${user}/user-logged-in/${auth?.currentUser?.uid}` : `/user/${user}`;
+        navigate(path)
+    }
+
     if (searchResult.length !== 0) {
         return (
             <div>
@@ -31,7 +41,9 @@ function DropDown({ searchResult }) {
                                 borderBottomLeftRadius: (idx === searchResult.length - 1 ? "10px" : null),
                                 borderBottomRightRadius: (idx === searchResult.length - 1 ? "10px" : null),
                             }}>
-                                <p>{result.item}</p>
+                                <button style={{ border: "transparent", backgroundColor: "transparent",
+                                    padding: "1rem"
+                                }} onClick={() => navUser(result.item)}>{result.item}</button>
                             </div>
                         </>
                     )

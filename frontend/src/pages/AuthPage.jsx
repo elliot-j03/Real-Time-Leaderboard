@@ -106,7 +106,7 @@ function AuthPage() {
         if (await backendCheck()) {
             try {
                 await signInWithEmailAndPassword(auth, email, passWordFirst);
-                navigate(`/user-logged-in=${auth?.currentUser?.uid}`);
+                navigate(`/user-logged-in/${auth?.currentUser?.uid}`);
             } catch (err) {
                 const code = err.code
                 switch (code) {

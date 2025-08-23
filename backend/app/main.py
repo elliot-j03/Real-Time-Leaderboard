@@ -4,7 +4,7 @@ from pydantic import BaseModel
 
 import backend.app.firebase_funcs as firebase_funcs
 
-app_firebase = firebase_funcs.initialise_firebase("./key/real-time-leaderboard.json")
+app_firebase = firebase_funcs.initialise_firebase("../key/real-time-leaderboard.json")
 app = FastAPI()
 
 
