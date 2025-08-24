@@ -93,6 +93,45 @@ async def score_submission(data: ScoreSubmission):
         return {"status": "false", "receivedScore": score_submitted}
 
 
+class FriendReq(BaseModel):
+    auth_token: str
+    user_uid: str
+    friend_uid: str
+
+# Sending a friend request
+@app.post("/friend-req/send")
+async def send_friend_req(data: FriendReq):
+    token = data.auth_token
+    uid = data.user_uid
+    fuid = data.friend_uid
+
+    auth: bool = await firebase_funcs.authenticate_token(token, app_firebase)
+    if auth:
+        try:
+            await firebase_funcs.send_friend_req_db(uid, fuid)
+            return {"status": "true"}
+        except Exception as e:
+            print(f"[ERROR] main.py/send_friend_req: {e}")
+    else:
+        return {"status": "false"}
+
+# Accepting a friend request
+@app.post("/friend-req/send")
+async def accept_friend_req(data: FriendReq):
+    token = data.auth_token
+    uid = data.user_uid
+    fuid = data.friend_uid
+
+    auth: bool = await firebase_funcs.authenticate_token(token, app_firebase)
+    if auth:
+        try:
+            await firebase_funcs.accept_friend_req_db(uid, fuid)
+            return {"status": "true"}
+        except Exception as e:
+            print(f"[ERROR] main.py/accept_friend_req: {e}")
+    else:
+        return {"status": "false"}
+
 # Endpoint
 @app.get("/")
 async def root():

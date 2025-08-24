@@ -51,3 +51,25 @@ export const submitScore = async (score, token, uid) => {
     const response = await axios.post(`${BASE_URL}/score`, data);
     return response.data;
 };
+
+// Request friend
+export const sendFriendRequest = async (token, uid, fuid) => {
+    const data = {
+        auth_token: token,
+        user_uid: uid,
+        friend_uid: fuid
+    };
+    const response = await axios.post(`${BASE_URL}/friend-req/send`, data);
+    return response.data;
+}
+
+// Accepting friends
+export  const acceptFriendRequest = async (token, uid, fuid) => {
+    const data = {
+        auth_token: token,
+        user_uid: uid,
+        friend_uid: fuid
+    };
+    const response = await axios.post(`${BASE_URL}/friend-req/accept`, data);
+    return response.data;
+}

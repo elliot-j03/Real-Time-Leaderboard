@@ -73,3 +73,31 @@ async def get_user_name_db(user_uid):
     except Exception as e:
         print(f"[ERROR] firebase_funcs.py/get_user_name_db: {e}")
 
+
+# Updates the requests node for the users in this interaction
+# TODO: add check for if already sent or if already friends maybe?
+async def send_friend_req_db(uid, fuid):
+    updates = {
+        f"/requests/{uid}/sent/{fuid}": True,
+        f"/requests/{fuid}/incoming/{uid}": True
+    }
+    ref = db.reference("/")
+    try:
+        ref.update(updates)
+    except Exception as e:
+        print(f"[ERROR] firebase_funcs.py/send_friend_req_db: {e}")
+
+
+async def accept_friend_req_db(uid, fuid):
+    updates = {
+        f"/friends/{uid}/{fuid}": True,
+        f"/friends/{fuid}/{uid}": True,
+        f"/requests/{uid}/sent/{fuid}": None,
+        f"/requests/{fuid}/incoming/{uid}": None
+    }
+    ref = db.reference("/")
+    try:
+        ref.update(updates)
+    except Exception as e:
+        print(f"[ERROR] firebase_funcs.py/accept_friend_req_db: {e}")
+

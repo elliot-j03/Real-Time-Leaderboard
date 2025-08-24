@@ -42,7 +42,7 @@ function DropDown({ searchResult }) {
                                 borderBottomRightRadius: (idx === searchResult.length - 1 ? "10px" : null),
                             }}>
                                 <button style={{ border: "transparent", backgroundColor: "transparent",
-                                    padding: "1rem"
+                                    padding: "1rem", outline: "none"
                                 }} onClick={() => navUser(result.item)}>{result.item}</button>
                             </div>
                         </>

@@ -70,7 +70,7 @@ function AuthPage() {
                         const uid = auth.currentUser.uid
                         const response = await initUserInDB(userName, email, uid);
                         console.log("[RESPONSE] AuthPage.jsx/createUser: "+response);
-                        navigate(`/${auth?.currentUser?.uid}`);
+                        navigate(`/user-logged-in/${auth?.currentUser?.uid}`);
                     } catch (err) {
                         const code = err.code;
                         switch (code) {

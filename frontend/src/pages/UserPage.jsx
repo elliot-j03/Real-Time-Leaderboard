@@ -3,6 +3,9 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 //Firebase
 import { auth } from "../config/firebase";
+import { signOut } from "firebase/auth";
+// API
+import { sendFriendRequest } from "../scripts/api";
 // Components
 import SearchBar from "../components/miscellaneous/SearchBar";
 import LoadingSpinner from "../components/miscellaneous/LoadingSpinner";
@@ -10,7 +13,9 @@ import LoadingSpinner from "../components/miscellaneous/LoadingSpinner";
 function UserPage({ userData }) {
     const navigate = useNavigate();
     const params = useParams();
+    const [pageUID, setPageUID] = useState();
     const [userScore, setUserScore] = useState();
+    const [userEmail, setUserEmail] = useState();
 
     function navLogIn() {
             navigate("/login");
@@ -19,7 +24,7 @@ function UserPage({ userData }) {
         const logOut = async () => {
             try {
                 await signOut(auth);
-                navigate("/leaderboard");
+                navigate(`/user/${params.username}`);
             } catch (err) {
                 console.log("[ERROR] LeaderboardPage.jsx/logOut: " + err);
             }
@@ -31,22 +36,33 @@ function UserPage({ userData }) {
         navigate(path);
     }
 
+    // Getting the user details for page
     useEffect(() => {
-        const semidUD = Object.entries(userData).map(([ uid, details ]) => {
-            return details;
-        })
-        const finalUD = semidUD.map(({ email, score, username }) => {
-            return [username, score];
-        })
-
-        for (let i = 0; i < finalUD.length; i++) {
-            if (finalUD[i][0] === params.username) {
-                setUserScore(finalUD[i][1]);
+        for (const uid in userData) {
+            if (userData[uid].username === params.username) {
+                setPageUID(uid);
+                setUserEmail(userData[uid].email);
+                setUserScore(userData[uid].score);
                 break;
             }
         }
-    
+
     },[params.username]);
+
+    async function reqFriend() {
+        if (auth.currentUser === null || auth.currentUser === undefined) {
+            console.log("please log in");
+        } else {
+            const loggedUID = auth.currentUser.uid;
+            const token = await auth.currentUser.getIdToken();
+            const response = await sendFriendRequest(token, loggedUID, pageUID);
+            if (response.status === "true") {
+                console.log("friend added");
+            } else {
+                console.log("failure");
+            }
+        }
+    }
 
     if (params.username === ":username") {
         return (
@@ -98,10 +114,19 @@ function UserPage({ userData }) {
                 </div>
                 <hr/>
                 <div style={{ display: "flex", flexDirection: "column",
-                    alignItems: "center"
+                    alignItems: "center", paddingTop: "1rem"
                     }}>
-                    <h1>{params.username}</h1>
+                    <div style={{ display: "flex", flexDirection: "row"}}>
+                        <div style={{ backgroundColor: "#1e1e1e", display: "flex",
+                            flexDirection: "column", justifyContent: "center",
+                            padding: "1rem", borderRadius: "10px"
+                        }}>
+                            <img src="/src/assets/trophy_icon.png" alt="profile_pic" />
+                        </div>
+                        <h1 style={{ paddingLeft: "1rem"}}>{params.username}</h1>
+                    </div>
                     <p>This player's current score is: {userScore}</p>
+                    <button className="action-button" onClick={reqFriend}>Add friend</button>
                 </div>
             </>
         )
