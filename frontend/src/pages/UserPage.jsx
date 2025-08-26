@@ -10,30 +10,50 @@ import { sendFriendRequest } from "../scripts/api";
 import SearchBar from "../components/miscellaneous/SearchBar";
 import LoadingSpinner from "../components/miscellaneous/LoadingSpinner";
 
-function UserPage({ userData }) {
+function UserPage({ userData, reqData, friendsData }) {
     const navigate = useNavigate();
     const params = useParams();
     const [pageUID, setPageUID] = useState();
     const [userScore, setUserScore] = useState();
     const [userEmail, setUserEmail] = useState();
 
+    const [requested, setRequested] = useState(false);
+
     function navLogIn() {
-            navigate("/login");
-        }
-    
-        const logOut = async () => {
-            try {
-                await signOut(auth);
-                navigate(`/user/${params.username}`);
-            } catch (err) {
-                console.log("[ERROR] LeaderboardPage.jsx/logOut: " + err);
-            }
-        }
-        const logInState = (auth.currentUser == null ? navLogIn : logOut);
+        navigate("/login");
+    }
 
     function navHome() {
         const path = auth?.currentUser?.uid !== undefined ? `/user-logged-in/${auth?.currentUser?.uid}` : "/";
         navigate(path);
+    }
+    
+    const logOut = async () => {
+        try {
+            await signOut(auth);
+            navigate(`/user/${params.username}`);
+        } catch (err) {
+            console.log("[ERROR] LeaderboardPage.jsx/logOut: " + err);
+        }
+    }
+
+    const logInState = (auth.currentUser == null ? navLogIn : logOut);
+
+    // Request friend
+    async function reqFriend() {
+        if (auth.currentUser === null || auth.currentUser === undefined) {
+            navLogIn();
+        } else {
+            const loggedUID = auth.currentUser.uid;
+            const token = await auth.currentUser.getIdToken();
+            const response = await sendFriendRequest(token, loggedUID, pageUID);
+            if (response.status === "true") {
+                setRequested(true);
+                console.log("friend added");
+            } else {
+                console.log("failure");
+            }
+        }
     }
 
     // Getting the user details for page
@@ -47,22 +67,20 @@ function UserPage({ userData }) {
             }
         }
 
-    },[params.username]);
+    },[params.username, userData]);
 
-    async function reqFriend() {
-        if (auth.currentUser === null || auth.currentUser === undefined) {
-            console.log("please log in");
-        } else {
-            const loggedUID = auth.currentUser.uid;
-            const token = await auth.currentUser.getIdToken();
-            const response = await sendFriendRequest(token, loggedUID, pageUID);
-            if (response.status === "true") {
-                console.log("friend added");
-            } else {
-                console.log("failure");
+    useEffect(() => {
+        const loggedUID = auth?.currentUser?.uid;
+
+        setRequested(false);
+        for (const uid in reqData) {
+            if (uid === pageUID) {
+                if (reqData[loggedUID]?.sent?.[uid]) {
+                    setRequested(true);
+                }
             }
         }
-    }
+    },[pageUID]);
 
     if (params.username === ":username") {
         return (
@@ -126,7 +144,12 @@ function UserPage({ userData }) {
                         <h1 style={{ paddingLeft: "1rem"}}>{params.username}</h1>
                     </div>
                     <p>This player's current score is: {userScore}</p>
-                    <button className="action-button" onClick={reqFriend}>Add friend</button>
+                    <p>Email: {userEmail}</p>
+                    {requested ? <button>Remove request</button> :
+                    <button className="action-button" onClick={reqFriend}>Add friend</button>}
+                    <button onClick={() => console.log(reqData)}>log req data</button>
+                    <button>log friends data</button>
+                    <p>{requested}</p>
                 </div>
             </>
         )

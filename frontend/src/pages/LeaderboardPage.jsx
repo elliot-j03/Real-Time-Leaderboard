@@ -12,7 +12,7 @@ import SearchBar from "../components/miscellaneous/SearchBar";
 // Functions
 import { posCalc } from "../scripts/positionCalc";
 
-function LBPage({ userData }) {
+function LBPage({ userData, reqData, friendsData }) {
     const [userList, setUserList] = useState([]);
     const [leaders, setLeaders] = useState([]);
     const navigate = useNavigate();

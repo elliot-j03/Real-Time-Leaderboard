@@ -13,7 +13,7 @@ import SearchBar from "../components/miscellaneous/SearchBar";
 import { posCalc } from "../scripts/positionCalc";
 
 
-function HomePage({ userData }) {
+function HomePage({ userData, reqData, friendsData }) {
     const [fetchedUser, setFetchedUser] = useState(false);
     const [userList, setUserList] = useState([]);
     const [userRow, setUserRow] = useState(null);
