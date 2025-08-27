@@ -8,7 +8,11 @@ To send http requests to the backend, it uses axios, but on occasion uses fireba
 * FastAPI
 * Firebase Admin
 ### Javascript
-* TO_DO
+* React
+* Firebase
+* Axios
+* Framer-motion
+* Fuse.js
 ## Preview
 gifs
 ## Set-Up
@@ -44,4 +48,52 @@ pip install -r requirements.txt
 ### Firebase
 Now that you've got the basic frontend and backend set up, you need to make your own Firebase database. To do this, you need to make your own Firebase project and connect it to the app.<br>
 
-Firstly, go to the [Firebase console](https://console.firebase.google.com/u/0/) and add a project. Make sure to follow the instructions on screen. Then, on the left sidebar click on all products (3x3 grid of squares), scroll to build and set up a **Realtime Database**. Click on create database and start it in **Test Mode**.
+Firstly, go to the [Firebase console](https://console.firebase.google.com/u/0/) and add a project. Make sure to follow the instructions on screen. Then, on the left sidebar click on all products (3x3 grid of squares), scroll to build and set up a **Realtime Database**. Click on create database and start it in **Test Mode**.<br>
+
+Next, you need to add your web app. Click on project settings and go to general. Under **Your Apps**, click **</> Web** and register an app. After creating one, you should have your config object<br>
+``` js
+const firebaseConfig = {
+  apiKey: "API_KEY",
+  authDomain: "PROJECT_ID.firebaseapp.com",
+  databaseURL: "https://PROJECT_ID.firebaseio.com",
+  projectId: "PROJECT_ID",
+  storageBucket: "PROJECT_ID.appspot.com",
+  messagingSenderId: "SENDER_ID",
+  appId: "APP_ID",
+  measurementID: "MEASUREMENT_ID"
+};
+```
+Using this, you need to create a **.env** file within the frontend directory and fill in the variables with the corresponding
+values. Here, you can keep the VITE_API_URL the same because you will be running it on your local host. Please notice how
+the strings are no longer marked with a surrounding ""<br>
+``` dotenv
+VITE_API_URL=http://127.0.0.1:8000
+VITE_FIREBASE_API_KEY=API_KEY
+VITE_FIREBASE_AUTH_DOMAIN=PROJECT_ID.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=PROJECT_ID
+VITE_FIREBASE_STORAGE_BUCKET=PROJECT_ID.appspot.com
+VITE_FIREBASE_MESSAGING_SENDER_ID=SENDER_ID
+VITE_FIREBASE_APP_ID=APP_ID
+VITE_FIREBASE_DATABASE_URL=DATABASE_URL
+VITE_FIREBASE_MEASUREMENT_ID=MEASUREMENT_ID
+```
+Now it's time to set up the backend. Go to project settings and find **Service Accounts**. Then, you need to generate a private key which downloads a JSON file. Under the backend directory, create a new folder called **key** and place the JSON file into it.<br>
+
+After doing so, you can rename the file to your choosing, but make sure whatever you change it to is written into the file path provided to intialise_firebase() function which can be found at the top of main.py
+``` python
+app_firebase = firebase_funcs.initialise_firebase("../key/FILE_NAME_HERE.json")
+```
+Now you should be all set to get it up an running! To run the frontend, open a terminal in the main folder and run the following commands
+```console
+cd frontend
+npm run dev
+```
+Then, for the backend, open another terminal and run the following commands
+``` console
+source .venv/Scripts/activate
+cd backend/app
+fastapi dev main.py
+```
+After following all of these steps, the leaderboard should be ready for you to use. Using the address that appears after running the frontend, usually http\://localhost:5173/, you can view the final product.<br>
+
+I hope you enjoy it! :)
