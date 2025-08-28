@@ -114,9 +114,28 @@ async def send_friend_req(data: FriendReq):
             print(f"[ERROR] main.py/send_friend_req: {e}")
     else:
         return {"status": "false"}
+    
+
+# Removing a previously sent friend request
+@app.post("/friend-req/undo")
+async def remove_friend_req(data: FriendReq):
+    token = data.auth_token
+    uid = data.user_uid
+    fuid = data.friend_uid
+
+    auth: bool = await firebase_funcs.authenticate_token(token, app_firebase)
+    if auth:
+        try:
+            await firebase_funcs.remove_friend_req_db(uid, fuid)
+            return {"status": "true"}
+        except Exception as e:
+            print(f"[ERROR] main.py/remove_friend_req: {e}")
+    else:
+        return {"status": "false"}
+
 
 # Accepting a friend request
-@app.post("/friend-req/send")
+@app.post("/friend-req/accept")
 async def accept_friend_req(data: FriendReq):
     token = data.auth_token
     uid = data.user_uid
@@ -131,6 +150,25 @@ async def accept_friend_req(data: FriendReq):
             print(f"[ERROR] main.py/accept_friend_req: {e}")
     else:
         return {"status": "false"}
+    
+
+# Removing an existing friend
+@app.post("/friend/remove")
+async def remove_friend(data: FriendReq):
+    token = data.auth_token
+    uid = data.user_uid
+    fuid = data.friend_uid
+
+    auth: bool = await firebase_funcs.authenticate_token(token, app_firebase)
+    if auth:
+        try:
+            await firebase_funcs.remove_friend_db(uid, fuid)
+            return {"status": "true"}
+        except Exception as e:
+            print(f"[ERROR] main.py/remove_friend: {e}")
+    else:
+        return {"status": "false"}
+
 
 # Endpoint
 @app.get("/")

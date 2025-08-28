@@ -4,11 +4,11 @@ import { useNavigate, useParams } from "react-router-dom";
 //Firebase
 import { auth } from "../config/firebase";
 import { signOut } from "firebase/auth";
-// API
-import { sendFriendRequest } from "../scripts/api";
 // Components
 import SearchBar from "../components/miscellaneous/SearchBar";
 import LoadingSpinner from "../components/miscellaneous/LoadingSpinner";
+// Functions
+import { reqFriend, removeReqFriend, acceptReqFriend, removeExistingFriend } from "../scripts/friends";
 
 function UserPage({ userData, reqData, friendsData }) {
     const navigate = useNavigate();
@@ -18,6 +18,8 @@ function UserPage({ userData, reqData, friendsData }) {
     const [userEmail, setUserEmail] = useState();
 
     const [requested, setRequested] = useState(false);
+    const [incoming, setIncoming] = useState(false);
+    const [friended, setFriended] = useState(false);
 
     function navLogIn() {
         navigate("/login");
@@ -39,23 +41,6 @@ function UserPage({ userData, reqData, friendsData }) {
 
     const logInState = (auth.currentUser == null ? navLogIn : logOut);
 
-    // Request friend
-    async function reqFriend() {
-        if (auth.currentUser === null || auth.currentUser === undefined) {
-            navLogIn();
-        } else {
-            const loggedUID = auth.currentUser.uid;
-            const token = await auth.currentUser.getIdToken();
-            const response = await sendFriendRequest(token, loggedUID, pageUID);
-            if (response.status === "true") {
-                setRequested(true);
-                console.log("friend added");
-            } else {
-                console.log("failure");
-            }
-        }
-    }
-
     // Getting the user details for page
     useEffect(() => {
         for (const uid in userData) {
@@ -69,18 +54,36 @@ function UserPage({ userData, reqData, friendsData }) {
 
     },[params.username, userData]);
 
+    // Determines state of friend button
     useEffect(() => {
         const loggedUID = auth?.currentUser?.uid;
 
         setRequested(false);
+        setIncoming(false);
+        setFriended(false);
+
         for (const uid in reqData) {
             if (uid === pageUID) {
+                if (reqData[loggedUID]?.incoming?.[uid]) {
+                    setIncoming(true);
+                }
+
                 if (reqData[loggedUID]?.sent?.[uid]) {
                     setRequested(true);
                 }
             }
         }
-    },[pageUID]);
+
+        for (const uid in friendsData) {
+            if (uid === pageUID) {
+                if (friendsData[uid]?.[loggedUID] || friendsData[loggedUID]?.[uid]) {
+                    setFriended(true);
+                }
+            }
+        }
+
+
+    },[pageUID, friendsData, reqData]);
 
     if (params.username === ":username") {
         return (
@@ -145,11 +148,11 @@ function UserPage({ userData, reqData, friendsData }) {
                     </div>
                     <p>This player's current score is: {userScore}</p>
                     <p>Email: {userEmail}</p>
-                    {requested ? <button>Remove request</button> :
-                    <button className="action-button" onClick={reqFriend}>Add friend</button>}
-                    <button onClick={() => console.log(reqData)}>log req data</button>
-                    <button>log friends data</button>
-                    <p>{requested}</p>
+                    {friended ? <button className="danger-button" onClick={() => removeExistingFriend(pageUID, setFriended)}>Remove friend</button> :
+                    incoming ? <button className="action-button" onClick={() => acceptReqFriend(pageUID, setIncoming)}>Accept friend</button> :
+                    requested ? <button className="reg-button" onClick={() => removeReqFriend(pageUID, setRequested)}>Unsend request</button> :
+                    <button className="action-button" onClick={() => reqFriend(pageUID, navLogIn, setRequested)}>Add friend</button>}
+                    <button onClick={() => console.log(friendsData)}>log friend</button>
                 </div>
             </>
         )

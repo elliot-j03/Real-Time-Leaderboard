@@ -63,13 +63,35 @@ export const sendFriendRequest = async (token, uid, fuid) => {
     return response.data;
 }
 
+// Removing friend req
+export const removeFriendRequest = async (token, uid, fuid) => {
+    const data = {
+        auth_token: token,
+        user_uid: uid,
+        friend_uid: fuid
+    };
+    const response = await axios.post(`${BASE_URL}/friend-req/undo`, data);
+    return response.data;
+}   
+
 // Accepting friends
-export  const acceptFriendRequest = async (token, uid, fuid) => {
+export const acceptFriendRequest = async (token, uid, fuid) => {
     const data = {
         auth_token: token,
         user_uid: uid,
         friend_uid: fuid
     };
     const response = await axios.post(`${BASE_URL}/friend-req/accept`, data);
+    return response.data;
+}
+
+// Removing friends
+export const removeFriend = async (token, uid, fuid) => {
+    const data = {
+        auth_token: token,
+        user_uid: uid,
+        friend_uid: fuid
+    };
+    const response = await axios.post(`${BASE_URL}/friend/remove`, data);
     return response.data;
 }

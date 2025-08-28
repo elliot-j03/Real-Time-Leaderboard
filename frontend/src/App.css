@@ -25,6 +25,51 @@ input {
   background-color: transparent;
 }
 
+/* Regular Button */
+.reg-button {
+  border-radius: 8px;
+  border: 1px solid;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #4a4a4a;
+  color: #ffffff;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+.reg-button:hover {
+  border-color: #f8c51f;
+  background-color: #242424;
+}
+.reg-button:focus,
+.reg-button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+/* Danger Button */
+.danger-button {
+  border-radius: 8px;
+  border: 1px solid;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #b71c1c;
+  color: #ffffff;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+
+.danger-button:hover {
+  border-color: #d62424;
+  background-color: #6e0e0e;
+}
+.danger-button:focus,
+.danger-button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
 /* Action Button */
 .action-button {
   border-radius: 8px;
