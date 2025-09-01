@@ -1,8 +1,9 @@
 # Real-Time Leaderboard Web Application
 ## WORK IN PROGRESS
 A web application that displays a real-time leaderboard of users scores that they can submit through the frontend. The frontend uses react.js, along with a number of other packages to create a dynamic user interface.
-To send http requests to the backend, it uses axios, but on occasion uses firebase to access the database directly. The backend uses FastAPI and the firebase admin sdk to handle user requests.
+To send http requests to the backend, it uses axios, but on occasion uses firebase to access the database directly. The backend uses FastAPI and the firebase admin sdk to handle user requests.<br>
 
+I built this application to learn the basics of Firebase and API usage. I chose Firebase and FastAPI because they seemed to both be a good introduction to working with such tools due to their ease of use. For databases, I could learn how to integrate them at first without having to learn SQL at the same time, which I will do later on. From the API perspective, FastAPI was simple and was written in python which I know quite well.<br>
 ## Libraries
 ### Python
 * FastAPI
