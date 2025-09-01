@@ -70,7 +70,7 @@ function AuthPage() {
                         const uid = auth.currentUser.uid
                         const response = await initUserInDB(userName, email, uid);
                         console.log("[RESPONSE] AuthPage.jsx/createUser: "+response);
-                        navigate(`/user-logged-in/${auth?.currentUser?.uid}`);
+                        navigate("/");
                     } catch (err) {
                         const code = err.code;
                         switch (code) {
@@ -106,7 +106,7 @@ function AuthPage() {
         if (await backendCheck()) {
             try {
                 await signInWithEmailAndPassword(auth, email, passWordFirst);
-                navigate(`/user-logged-in/${auth?.currentUser?.uid}`);
+                navigate("/");
             } catch (err) {
                 const code = err.code
                 switch (code) {

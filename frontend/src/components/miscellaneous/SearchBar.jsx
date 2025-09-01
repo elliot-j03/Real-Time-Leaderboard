@@ -24,8 +24,8 @@ function DropDown({ searchResult }) {
     const navigate = useNavigate();
 
     function navUser(user) {
-        const path = auth?.currentUser?.uid !== undefined ? `/user/${user}/user-logged-in/${auth?.currentUser?.uid}` : `/user/${user}`;
-        navigate(path)
+        const path = `/user/${user}`;
+        navigate(path);
     }
 
     if (searchResult.length !== 0) {
@@ -33,7 +33,7 @@ function DropDown({ searchResult }) {
             <div>
                 {searchResult.map((result, idx) => {
                     return (
-                        <>
+                        <div key={idx}>
                             <div style={{ paddingLeft: "1rem", border: "1px, solid",
                                 borderColor: "#343434ff", 
                                 borderTopLeftRadius: (idx === 0 ? "10px" : null),
@@ -45,7 +45,7 @@ function DropDown({ searchResult }) {
                                     padding: "1rem", outline: "none"
                                 }} onClick={() => navUser(result.item)}>{result.item}</button>
                             </div>
-                        </>
+                        </div>
                     )
                 })}
             </div>

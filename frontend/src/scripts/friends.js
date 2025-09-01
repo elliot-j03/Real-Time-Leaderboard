@@ -13,7 +13,6 @@ export async function reqFriend(pageUID, navLogIn, setRequested) {
         const response = await sendFriendRequest(token, loggedUID, pageUID);
         if (response.status === "true") {
             setRequested(true);
-            console.log("friend added");
         } else {
             console.log("failure");
         }
@@ -27,7 +26,6 @@ export async function removeReqFriend(pageUID, setRequested) {
     const response = await removeFriendRequest(token, loggedUID, pageUID);
     if (response.status === "true") {
         setRequested(false);
-        console.log("request removed");
     } else {
         console.log("failure");
     }
@@ -40,7 +38,6 @@ export async function acceptReqFriend(pageUID, setIncoming) {
     const response = await acceptFriendRequest(token, loggedUID, pageUID);
     if (response.status === "true") {
         setIncoming(false);
-        console.log("request accepted");
     } else {
         console.log("failure");
     }
@@ -53,7 +50,6 @@ export async function removeExistingFriend(pageUID, setFriended) {
     const response = await removeFriend(token, loggedUID, pageUID);
     if (response.status === "true") {
         setFriended(false);
-        console.log("friend removed");
     } else {
         console.log("failure");
     }

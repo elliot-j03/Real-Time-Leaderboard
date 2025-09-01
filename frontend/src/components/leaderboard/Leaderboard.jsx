@@ -1,5 +1,6 @@
 // React
 import { useRef, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 // Animations
 import { AnimatePresence, motion, useInView } from 'framer-motion';
 // Components
@@ -35,6 +36,11 @@ const Leaderboard = ({
   const [keyboardNav, setKeyboardNav] = useState(false);
   const [topGradientOpacity, setTopGradientOpacity] = useState(0);
   const [bottomGradientOpacity, setBottomGradientOpacity] = useState(1);
+  const navigate = useNavigate();
+
+  function navUser(userName) {
+    navigate(`/user/${userName}`);
+  }
 
   // Handles scrolling
   const handleScroll = (e) => {
@@ -111,12 +117,7 @@ const Leaderboard = ({
                     delay={0.1}
                     index={index}
                     onMouseEnter={() => setSelectedIndex(index)}
-                    onClick={() => {
-                        setSelectedIndex(index);
-                        if (onItemSelect) {
-                            onItemSelect(item, index);
-                        }
-                    }} >
+                    onClick={() => navUser(userName)} >
                         <div className={`item ${selectedIndex === index ? 'selected' : ''}`}
                           style={{ padding: "0.1rem"}}
                         >

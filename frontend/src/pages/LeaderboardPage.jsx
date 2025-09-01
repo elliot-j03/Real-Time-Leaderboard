@@ -19,8 +19,7 @@ function LBPage({ userData, reqData, friendsData }) {
 
 
     function navHome() {
-        const path = auth?.currentUser?.uid !== undefined ? `/user-logged-in/${auth?.currentUser?.uid}` : "/";
-        navigate(path);
+        navigate("/");
     }
 
     function navLogIn() {

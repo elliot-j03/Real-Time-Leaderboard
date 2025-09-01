@@ -26,8 +26,7 @@ function UserPage({ userData, reqData, friendsData }) {
     }
 
     function navHome() {
-        const path = auth?.currentUser?.uid !== undefined ? `/user-logged-in/${auth?.currentUser?.uid}` : "/";
-        navigate(path);
+        navigate("/");
     }
     
     const logOut = async () => {
@@ -60,30 +59,40 @@ function UserPage({ userData, reqData, friendsData }) {
 
         setRequested(false);
         setIncoming(false);
-        setFriended(false);
 
-        for (const uid in reqData) {
-            if (uid === pageUID) {
-                if (reqData[loggedUID]?.incoming?.[uid]) {
-                    setIncoming(true);
-                }
-
-                if (reqData[loggedUID]?.sent?.[uid]) {
-                    setRequested(true);
-                }
-            }
+        if (reqData?.sent && reqData?.sent[pageUID]) {
+            setRequested(true);
         }
 
-        for (const uid in friendsData) {
-            if (uid === pageUID) {
-                if (friendsData[uid]?.[loggedUID] || friendsData[loggedUID]?.[uid]) {
+        if (reqData?.incoming && reqData?.incoming[pageUID]) {
+            setIncoming(true);
+        }
+
+    },[pageUID, reqData]);
+
+    useEffect(() => {
+        const loggedUID = auth?.currentUser?.uid;
+
+        setFriended(false);
+
+        if (friendsData !== null) {
+            for (const uid in friendsData) {
+                if (uid === pageUID) {
                     setFriended(true);
                 }
             }
         }
+    }, [pageUID, friendsData]);
 
-
-    },[pageUID, friendsData, reqData]);
+    // Ensures button state is correct if other methods fails
+    useEffect(() => {
+        const uid = auth?.currentUser?.uid;
+        if (uid === undefined || uid === null) {
+            setRequested(false);
+            setIncoming(false);
+            setFriended(false);
+        }
+    },[auth?.currentUser?.uid]);
 
     if (params.username === ":username") {
         return (
@@ -152,7 +161,6 @@ function UserPage({ userData, reqData, friendsData }) {
                     incoming ? <button className="action-button" onClick={() => acceptReqFriend(pageUID, setIncoming)}>Accept friend</button> :
                     requested ? <button className="reg-button" onClick={() => removeReqFriend(pageUID, setRequested)}>Unsend request</button> :
                     <button className="action-button" onClick={() => reqFriend(pageUID, navLogIn, setRequested)}>Add friend</button>}
-                    <button onClick={() => console.log(friendsData)}>log friend</button>
                 </div>
             </>
         )
