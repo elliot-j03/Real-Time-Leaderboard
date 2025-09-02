@@ -93,6 +93,50 @@ input {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+/* Icon Button */
+.icon-button {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: none;
+  background: none;
+  background-color: #131313ff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+}
+
+.icon-button img {
+  width: 80%;
+  height: 80%;
+  display: block;
+}
+
+.icon-button[data-count]:after {
+  content: attr(data-count);
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: #a71111;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 50%;
+  padding: 2px 5px;
+  min-width: 10px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.icon-button[data-count="0"]::after {
+  display: none;
+}
+
 /* Loading spinner */
 .spinner {
   animation: rotate 1s linear infinite;

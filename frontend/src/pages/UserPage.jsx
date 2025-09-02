@@ -55,8 +55,6 @@ function UserPage({ userData, reqData, friendsData }) {
 
     // Determines state of friend button
     useEffect(() => {
-        const loggedUID = auth?.currentUser?.uid;
-
         setRequested(false);
         setIncoming(false);
 
@@ -71,8 +69,6 @@ function UserPage({ userData, reqData, friendsData }) {
     },[pageUID, reqData]);
 
     useEffect(() => {
-        const loggedUID = auth?.currentUser?.uid;
-
         setFriended(false);
 
         if (friendsData !== null) {
@@ -157,7 +153,8 @@ function UserPage({ userData, reqData, friendsData }) {
                     </div>
                     <p>This player's current score is: {userScore}</p>
                     <p>Email: {userEmail}</p>
-                    {friended ? <button className="danger-button" onClick={() => removeExistingFriend(pageUID, setFriended)}>Remove friend</button> :
+                    {pageUID === auth?.currentUser?.uid ? null :
+                    friended ? <button className="danger-button" onClick={() => removeExistingFriend(pageUID, setFriended)}>Remove friend</button> :
                     incoming ? <button className="action-button" onClick={() => acceptReqFriend(pageUID, setIncoming)}>Accept friend</button> :
                     requested ? <button className="reg-button" onClick={() => removeReqFriend(pageUID, setRequested)}>Unsend request</button> :
                     <button className="action-button" onClick={() => reqFriend(pageUID, navLogIn, setRequested)}>Add friend</button>}

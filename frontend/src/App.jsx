@@ -74,9 +74,11 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<HomePage userData={userData} />}/>
+        <Route path="/" element={<HomePage userData={userData}
+          reqData={reqData} />}/>
         <Route path="/login" element={<AuthPage />}/>
-        <Route path="/leaderboard/" element={<LBPage userData={userData}/>}/>
+        <Route path="/leaderboard/" element={<LBPage userData={userData}
+          reqData={reqData} />}/>
         <Route path="/user/:username/" element={<UserPage userData={userData}
           reqData={reqData} friendsData={friendsData}/>}/>
       </Routes>

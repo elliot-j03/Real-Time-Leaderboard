@@ -9,10 +9,11 @@ import SubmitBox from "../components/leaderboard/SubmitBox";
 import Leaderboard from "../components/leaderboard/Leaderboard";
 import TopThree from "../components/leaderboard/TopThreeBox";
 import SearchBar from "../components/miscellaneous/SearchBar";
+import Notif from "../components/miscellaneous/Notifications";
 // Functions
 import { posCalc } from "../scripts/positionCalc";
 
-function LBPage({ userData, reqData, friendsData }) {
+function LBPage({ userData, reqData }) {
     const [userList, setUserList] = useState([]);
     const [leaders, setLeaders] = useState([]);
     const navigate = useNavigate();
@@ -109,7 +110,12 @@ function LBPage({ userData, reqData, friendsData }) {
                         justifyContent: "center", padding: "1rem", flex: "5"}}>
                             <SearchBar userData={userData}/>
                     </div>
-                    <div style={{ flex: "1", display: "flex", justifyContent: "end", paddingRight: "1rem"}}>
+                    <div style={{ flex: "1", display: "flex", justifyContent: "end", paddingRight: "1rem",
+                        alignItems: "center"
+                    }}>
+                        <div style={{ paddingRight: "1rem"}}>
+                            <Notif reqData={reqData}/>
+                        </div>
                         <button onClick={logInState} style={{ maxWidth: "10rem" }}>
                             { auth?.currentUser ? "Log Out" : "Log In"}</button>
                     </div>

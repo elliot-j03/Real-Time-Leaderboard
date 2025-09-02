@@ -9,11 +9,12 @@ import { UserContext } from "../components/UserProvider";
 import LoadingSpinner from "../components/miscellaneous/LoadingSpinner";
 import LBRow from "../components/leaderboard/LeaderboardRow";
 import SearchBar from "../components/miscellaneous/SearchBar";
+import Notif from "../components/miscellaneous/Notifications";
 // Functions
 import { posCalc } from "../scripts/positionCalc";
 
 
-function HomePage({ userData, reqData, friendsData }) {
+function HomePage({ userData, reqData }) {
     const [fetchedUser, setFetchedUser] = useState(false);
     const [userList, setUserList] = useState([]);
     const [userRow, setUserRow] = useState(null);
@@ -152,7 +153,12 @@ function HomePage({ userData, reqData, friendsData }) {
                         justifyContent: "center", padding: "1rem", flex: "5"}}>
                             <SearchBar userData={userData}/>
                     </div>
-                    <div style={{ flex: "1", display: "flex", justifyContent: "end", paddingRight: "1rem"}}>
+                    <div style={{ flex: "1", display: "flex", justifyContent: "end", paddingRight: "1rem",
+                        alignItems: "center"
+                    }}>
+                        <div style={{ paddingRight: "1rem" }}>
+                            <Notif userData={userData} reqData={reqData}/>
+                        </div>
                         <button onClick={logInState} style={{ maxWidth: "10rem" }}>
                             { auth?.currentUser ? "Log Out" : "Log In"}</button>
                     </div>

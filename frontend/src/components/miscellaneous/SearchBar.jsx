@@ -1,10 +1,9 @@
 // React
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-// Firebase
-import { auth } from "../../config/firebase";
 // Fuse
 import Fuse from "fuse.js";
+// Components
+import DropDown from "./DropDown";
 // Images
 import searchMG from "../../assets/search_mg.png";
 
@@ -17,50 +16,6 @@ function getUserNames(users) {
         userNames.push(Object.entries(users)[i][1].username);
     }
     return userNames;
-}
-
-
-function DropDown({ searchResult }) {
-    const navigate = useNavigate();
-
-    function navUser(user) {
-        const path = `/user/${user}`;
-        navigate(path);
-    }
-
-    if (searchResult.length !== 0) {
-        return (
-            <div>
-                {searchResult.map((result, idx) => {
-                    return (
-                        <div key={idx}>
-                            <div style={{ paddingLeft: "1rem", border: "1px, solid",
-                                borderColor: "#343434ff", 
-                                borderTopLeftRadius: (idx === 0 ? "10px" : null),
-                                borderTopRightRadius: (idx === 0 ? "10px" : null),
-                                borderBottomLeftRadius: (idx === searchResult.length - 1 ? "10px" : null),
-                                borderBottomRightRadius: (idx === searchResult.length - 1 ? "10px" : null),
-                            }}>
-                                <button style={{ border: "transparent", backgroundColor: "transparent",
-                                    padding: "1rem", outline: "none"
-                                }} onClick={() => navUser(result.item)}>{result.item}</button>
-                            </div>
-                        </div>
-                    )
-                })}
-            </div>
-        )
-    } else {
-        return (
-            <>
-                <div style={{ paddingLeft: "1rem", border: "1px, solid",
-                    borderColor: "#343434ff", borderRadius: "10px"
-                }}>
-                    <p>No users match your search...</p>
-                </div>
-            </>
-        )
-    }
 }
 
 
@@ -106,7 +61,7 @@ function SearchBar({ userData }) {
                 <div style={{ position: "absolute", top: "45px", left: "50%", transform: "translateX(-50%)",
                     backgroundColor: "#131313ff", minWidth: "300px", borderRadius: "10px",
                     border: "1px, solid", borderColor: "#343434ff", zIndex: "999"}}>
-                    <DropDown searchResult={searchResult}/>
+                    <DropDown userList={searchResult} dropDownType={"search"}/>
                 </div>
             ) : null}
         </div>
