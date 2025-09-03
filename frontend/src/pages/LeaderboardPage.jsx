@@ -46,9 +46,10 @@ function LBPage({ userData, reqData }) {
         }
     }, [userData]);
 
+    // Getting leaders
     useEffect(() => {
         if (userList.length > 0) {
-            setLeaders([userList[0], userList[1], userList[2]]);
+            setLeaders([userList[0], userList[1], userList[2]], ["temp", 5, 5]);
         }
     }, [userList]);
     

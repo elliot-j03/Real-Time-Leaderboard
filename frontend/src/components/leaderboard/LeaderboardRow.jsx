@@ -4,30 +4,32 @@ function LBRow({ pos, user, score , colourBoxes}) {
         return(
             <div style={{ backgroundColor: (pos === 1 ? "#ffd05aff" :
                 pos === 2 && colourBoxes ? "#bbbbbbff" : 
-                pos === 3 && colourBoxes ? "#915827ff" : "#1e1e1e"), 
+                pos === 3 && colourBoxes ? "#915827ff" : "transparent"), 
                 minHeight: "70px", display: "flex", flexDirection: "row", 
                 alignItems: "center", borderRadius: "10px", justifyContent: "center",
                 paddingLeft: "0.5rem", paddingRight: "0.5rem", minWidth: "350px"
             }}>
                 <div style={{ backgroundColor: (pos === 1 ? "#ebbd48ff" : 
-                    pos === 2 ? "#adadadff" : "#845023ff"),
+                    pos === 2 ? "#adadadff" : pos === 3 ? "#845023ff" : "transparent"),
                     borderRadius: "15px", maxHeight: "40px", maxWidth: "40px",
                     display: "flex", flexDirection: "column", justifyContent: "center", flex: 1
                 }}>
-                    <p style={{ color: "white", paddingRight: "1rem" , paddingLeft: "1rem" }}>{pos}</p>
+                    <p style={{ color: (pos !== 1 && pos !== 2 && pos !== 3 ? "transparent" : "white"), 
+                        paddingRight: "1rem" , paddingLeft: "1rem" }}>{pos}</p>
                 </div>
                 <div style={{flex: 2, display: "flex", justifyContent: "center", 
                     paddingLeft: "0.5rem", paddingRight: "0.5rem"
                 }}>
-                    <p style={{ color: "white", fontSize: 20, fontWeight: "bold"
+                    <p style={{ color: (pos !== 1 && pos !== 2 && pos !== 3 ? "transparent" : "white"), 
+                    fontSize: 20, fontWeight: "bold"
                     }}>{user}</p>
                 </div>
                 <div style={{ backgroundColor: (pos === 1 ? "#ebbd48ff" : 
-                    pos === 2 ? "#adadadff" : "#845023ff"),
+                    pos === 2 ? "#adadadff" : pos === 3 ? "#845023ff" : "transparent"),
                     flex: 1, display: "flex", justifyContent: "center", alignItems: "center", 
                     maxWidth: "40px", borderRadius: "15px", maxHeight: "40px"
                 }}>
-                    <p style={{ color: "white", paddingRight: "1rem" , paddingLeft: "1rem" }}>{score}</p>
+                    <p style={{ color: (pos !== 1 && pos !== 2 && pos !== 3 ? "transparent" : "white"), paddingRight: "1rem" , paddingLeft: "1rem" }}>{score}</p>
                 </div>
             </div>
         )
