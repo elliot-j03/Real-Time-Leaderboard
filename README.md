@@ -1,9 +1,16 @@
 # Real-Time Leaderboard Web Application
-## WORK IN PROGRESS
 A web application that displays a real-time leaderboard of users scores that they can submit through the frontend. The frontend uses react.js, along with a number of other packages to create a dynamic user interface.
 To send http requests to the backend, it uses axios, but on occasion uses firebase to access the database directly. The backend uses FastAPI and the firebase admin sdk to handle user requests.<br>
 
 I built this application to learn the basics of Firebase and API usage. I chose Firebase and FastAPI because they seemed to both be a good introduction to working with such tools due to their ease of use. For databases, I could learn how to integrate them at first without having to learn SQL at the same time, which I will do later on. From the API perspective, FastAPI was simple and was written in python which I know quite well.<br>
+
+### API and Database interactions
+Most of my API calls work by sending the JSON web token, along with any other necessary information to the backend. Here, the backend uses firebase admin to authenticate the token, which will then allow the user to complete
+the rest of the function. This will then update the database accordingly, or just read it using get, set, update, and delete functions.
+
+### Friend Requests
+When sending a request, the database **requests** node is updated with the user ids of the users involved in the interaction. The one sending the request is updated with a **sent** key, with a value of the id of the user that has received it. The same is done for the other user, however it sets a key called **incoming** along with the other user's id. The components use this data to determine the state of the friend button and
+the notification bell, which can be seen in the gifs below. When a user accepts the request, the previous request data is deleted and a new entry in the **friends** node is created for each user.
 ## Libraries
 ### Python
 * FastAPI
@@ -15,7 +22,20 @@ I built this application to learn the basics of Firebase and API usage. I chose 
 * Framer-motion
 * Fuse.js
 ## Preview
-gifs
+### Please bear with the quality of the gifs, I have tried to showcase as much as possible with the limited file size
+A client using the login page<br>
+
+<img src="https://github.com/user-attachments/assets/7a5e4b38-b114-41c1-b546-0a99124191dd" alt="login page" width="800" /><br>
+
+The client submits a new score. The database is updated, triggering the listeners and thus passing a new leaderboard list to the react leaderboard component<br>
+
+![Edit score](https://github.com/user-attachments/assets/0ef7954f-91a6-45ce-8c07-964552b67e43)<br>
+
+One user sends a friends request to another (top), the other receives a notification and accepts thes friend request (bottom)<br>
+
+![Sending a friend request](https://github.com/user-attachments/assets/f68fd040-eeb2-474d-9d7c-d4ac7d8059e7)<br>
+![Accepting a friend request](https://github.com/user-attachments/assets/f838453d-c0e6-4945-b155-ec9493496d5c)<br>
+
 ## Set-Up
 ### To try this code out for yourself, please follow the steps below...
 To run this project you need both Python and Node.js installed on your system. If you dont' have either, go to the following websites and download the version you need...
