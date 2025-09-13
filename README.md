@@ -1,4 +1,9 @@
 # Real-Time Leaderboard Web Application
+* [Description](#description)<br>
+* [Libraries](#libraries)<br>
+* [Preview](#preview)<br>
+* [Set-Up](#set-up)<br>
+## Description
 A web application that displays a real-time leaderboard of users scores that they can submit through the frontend. The frontend uses react.js, along with a number of other packages to create a dynamic user interface.
 To send http requests to the backend, it uses axios, but on occasion uses firebase to access the database directly. The backend uses FastAPI and the firebase admin sdk to handle user requests.<br>
 
